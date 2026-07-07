@@ -1,0 +1,29 @@
+{
+  "name": "dok7-landing",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "dev:turbo": "next dev --turbopack -p 3000",
+    "dev:clean": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-clean.ps1",
+    "dev:stop": "powershell -ExecutionPolicy Bypass -File ./scripts/stop-dev.ps1",
+    "build": "next build",
+    "build:clean": "powershell -ExecutionPolicy Bypass -File ./scripts/build-clean.ps1",
+    "start": "next start -p 3000",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.3.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "eslint": "^9.28.0",
+    "eslint-config-next": "^15.3.4",
+    "typescript": "^5.8.3"
+  }
+}
