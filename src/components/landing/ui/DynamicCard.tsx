@@ -35,7 +35,7 @@ export function DynamicCard({ dynamic, onOpen }: DynamicCardProps) {
         <h3>{dynamic.title}</h3>
         <p>{dynamic.description}</p>
         <span className="dok7-dynamic-card-cta" style={{ color: dynamic.accent }}>
-          <PlayIcon /> Ver demo →
+          <PlayIcon /> Ver demo
         </span>
       </div>
     </article>

@@ -50,10 +50,10 @@ export const RANKING_DATA: RankingItem[] = [
 ];
 
 export const STATS_DATA: StatItem[] = [
-  { label: 'Leads captados', value: '1,248', change: '↑ 24%' },
-  { label: 'Tasa de conversión', value: '18.6%', change: '↑ 12%' },
-  { label: 'Premios entregados', value: '532', change: '↑ 8%' },
-  { label: 'ROI de campaña', value: '3.4x', change: '↑ 16%' },
+  { label: 'Leads captados', value: '1,248', change: '+24%' },
+  { label: 'Tasa de conversión', value: '18.6%', change: '+12%' },
+  { label: 'Premios entregados', value: '532', change: '+8%' },
+  { label: 'ROI de campaña', value: '3.4x', change: '+16%' },
 ];
 
 export const FLOW_STEPS: FlowStep[] = [

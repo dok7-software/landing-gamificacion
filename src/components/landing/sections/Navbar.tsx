@@ -1,8 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import { NAV_ITEMS } from '../data/content';
 import { CloseIcon, MenuIcon } from '../icons';
+
+const LOGO_SRC = '/Logo-completo_blanco_sin-fondo.png';
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,11 +27,15 @@ export function Navbar() {
         background: 'rgba(11,11,26,0.92)',
       }}
     >
-      <a href="#" className="dok7-nav-logo" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
-        <div style={{ width: 40, height: 40, background: '#6c3aed', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: 'white', fontSize: 14 }}>
-          D7
-        </div>
-        <span style={{ fontWeight: 700, fontSize: 20, color: 'white', letterSpacing: 0.5 }}>DOK7</span>
+      <a href="#" className="dok7-nav-logo" aria-label="DOK7 - Inicio">
+        <Image
+          src={LOGO_SRC}
+          alt="DOK7"
+          width={140}
+          height={40}
+          className="dok7-nav-logo-img"
+          priority
+        />
       </a>
 
       <div className="dok7-nav-links">

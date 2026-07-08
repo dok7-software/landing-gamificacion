@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from 'react';
 import { CONTACT_FORM_OPTIONS } from '../data/content';
-import { ArrowRightIcon, LockIcon } from '../icons';
+import { LockIcon } from '../icons';
 import { FormField, FormSelect, FormTextarea } from '../ui/FormFields';
 
 interface ContactFormState {
@@ -87,7 +87,6 @@ export function ContactSection() {
                 style={{ width: '100%', padding: 18, background: 'linear-gradient(135deg,#6c3aed,#7c5cfc)', border: 'none', borderRadius: 14, color: 'white', fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
               >
                 Solicitar propuesta
-                <ArrowRightIcon />
               </button>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 20 }}>
                 <LockIcon />

@@ -3,8 +3,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { FAQ_ITEMS } from '../data/content';
-import { ChevronDownIcon } from '../icons';
-
 export function FaqSection() {
   const [openIndex, setOpenIndex] = useState(-1);
 
@@ -54,7 +52,6 @@ export function FaqSection() {
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
               >
                 <span style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{faq.question}</span>
-                <ChevronDownIcon rotated={isOpen} />
               </button>
               {isOpen && (
                 <p id={panelId} role="region" aria-labelledby={headingId} style={{ margin: '12px 0 0', fontSize: 14, color: 'rgba(15,23,42,0.6)', lineHeight: 1.6 }}>

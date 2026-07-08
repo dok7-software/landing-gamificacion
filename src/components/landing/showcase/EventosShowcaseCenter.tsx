@@ -10,7 +10,12 @@ const SCENES = [
 
 type SceneId = (typeof SCENES)[number]['id'];
 
-export function EventosShowcaseCenter() {
+interface EventosShowcaseCenterProps {
+  yourPoints: number;
+  onEarnPoints: (points: number) => void;
+}
+
+export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowcaseCenterProps) {
   const [scene, setScene] = useState<SceneId>('pasaporte');
   const [stamps, setStamps] = useState(3);
   const [scanning, setScanning] = useState(false);
@@ -36,19 +41,25 @@ export function EventosShowcaseCenter() {
       setStamps((n) => n + 1);
       setScanning(false);
       setToast('¡Sello añadido! +50 pts');
+      onEarnPoints(50);
     }, 1000);
   };
 
   const advanceMission = () => {
     if (missionProgress >= 5) return;
-    setMissionProgress((n) => n + 1);
-    setToast(missionProgress + 1 >= 5 ? '¡Misión completada! +120 pts' : `Stand ${missionProgress + 1} visitado`);
+    const next = missionProgress + 1;
+    const points = next >= 5 ? 120 : 24;
+    setMissionProgress(next);
+    setToast(next >= 5 ? '¡Misión completada! +120 pts' : `Stand ${next} visitado (+24 pts)`);
+    onEarnPoints(points);
   };
 
   const answerTrivia = (correct: boolean) => {
     if (triviaAnswered) return;
+    const points = correct ? 80 : 20;
     setTriviaAnswered(true);
-    setToast(correct ? '¡Correcto! +80 pts' : 'Casi — +20 pts por participar');
+    setToast(correct ? '¡Correcto! +80 pts' : '¡Casi! +20 pts por participar');
+    onEarnPoints(points);
     setTimeout(() => setTriviaAnswered(false), 2500);
   };
 
@@ -62,7 +73,7 @@ export function EventosShowcaseCenter() {
         <div className="dok7-showcase-pill">
           <span className="dok7-showcase-pill-label">Puntos</span>
           <span className="dok7-showcase-pill-value" style={{ color: '#7c5cfc' }}>
-            {stamps * 50 + missionProgress * 24 + (triviaAnswered ? 80 : 0)}
+            {yourPoints}
           </span>
         </div>
         <div className="dok7-showcase-pill dok7-showcase-pill--live">

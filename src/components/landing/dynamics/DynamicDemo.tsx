@@ -1,7 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DynamicId } from '../types';
+import { ScratchCard } from './ScratchCard';
 
 interface DynamicDemoProps {
   id: DynamicId;
@@ -212,29 +213,52 @@ function TriviaDemo({ accent }: { accent: string }) {
 }
 
 const WHEEL_PRIZES = ['10% OFF', 'Envío gratis', 'Producto gratis', '50 pts', 'Intenta otra vez', '20% OFF'];
+const WHEEL_SEGMENT_ANGLE = 360 / WHEEL_PRIZES.length;
+
+function getPrizeIndexFromRotation(degrees: number): number {
+  const normalized = ((degrees % 360) + 360) % 360;
+  const angleAtPointer = (360 - normalized) % 360;
+  return Math.floor(angleAtPointer / WHEEL_SEGMENT_ANGLE) % WHEEL_PRIZES.length;
+}
+
+function getWheelResultMessage(prize: string): string {
+  if (prize.toLowerCase() === 'intenta otra vez') {
+    return '¡Intenta otra vez! 🔄';
+  }
+  return `¡Has ganado: ${prize}! 🎉`;
+}
 
 function RuletaDemo({ accent }: { accent: string }) {
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [prize, setPrize] = useState<string | null>(null);
+  const rotationRef = useRef(0);
 
   const spin = () => {
     if (spinning) return;
     setSpinning(true);
     setPrize(null);
-    const segment = Math.floor(Math.random() * 6);
-    const extra = 360 * 5 + segment * 60 + 30;
-    setRotation((r) => r + extra);
+
+    const segment = Math.floor(Math.random() * WHEEL_PRIZES.length);
+    const sliceCenter = segment * WHEEL_SEGMENT_ANGLE + WHEEL_SEGMENT_ANGLE / 2;
+    const currentMod = ((rotationRef.current % 360) + 360) % 360;
+    const targetMod = (360 - sliceCenter + 360) % 360;
+    const delta = (targetMod - currentMod + 360) % 360;
+    const nextRotation = rotationRef.current + 360 * 5 + delta;
+
+    rotationRef.current = nextRotation;
+    setRotation(nextRotation);
+
     setTimeout(() => {
       setSpinning(false);
-      setPrize(WHEEL_PRIZES[segment]);
+      setPrize(WHEEL_PRIZES[getPrizeIndexFromRotation(nextRotation)]);
     }, 4000);
   };
 
   return (
     <div className="dok7-demo dok7-demo--ruleta">
       <div className="dok7-demo-wheel-wrap">
-        <div className="dok7-demo-wheel-pointer" style={{ borderBottomColor: accent }} />
+        <div className="dok7-demo-wheel-pointer" style={{ borderTopColor: accent }} />
         <div
           className="dok7-demo-wheel"
           style={{ transform: `rotate(${rotation}deg)`, transition: spinning ? 'transform 4s cubic-bezier(0.17,0.67,0.12,0.99)' : 'none' }}
@@ -249,26 +273,15 @@ function RuletaDemo({ accent }: { accent: string }) {
       <button type="button" className="dok7-demo-btn" style={{ background: accent }} onClick={spin} disabled={spinning}>
         {spinning ? 'Girando...' : '¡Girar ruleta!'}
       </button>
-      {prize && <p className="dok7-demo-toast">¡Has ganado: {prize}! 🎉</p>}
+      {prize && <p className="dok7-demo-toast">{getWheelResultMessage(prize)}</p>}
     </div>
   );
 }
 
 function RascaDemo({ accent }: { accent: string }) {
-  const [revealed, setRevealed] = useState(0);
-  const prize = '20% de descuento';
-
-  const scratch = () => setRevealed((r) => Math.min(r + 25, 100));
-
   return (
     <div className="dok7-demo dok7-demo--rasca">
-      <div className="dok7-demo-scratch-area" onClick={scratch} onKeyDown={(e) => e.key === 'Enter' && scratch()} role="button" tabIndex={0}>
-        <div className="dok7-demo-scratch-prize" style={{ color: accent }}>{prize}</div>
-        <div className="dok7-demo-scratch-cover" style={{ opacity: 1 - revealed / 100 }}>
-          <span>Haz clic para rascar ({100 - revealed}% restante)</span>
-        </div>
-      </div>
-      {revealed >= 100 && <p className="dok7-demo-toast">¡Premio revelado! Canjéalo ahora 🎁</p>}
+      <ScratchCard accent={accent} prize="20% de descuento" />
     </div>
   );
 }

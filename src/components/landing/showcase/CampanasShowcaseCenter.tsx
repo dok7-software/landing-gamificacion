@@ -1,15 +1,30 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { FLOW_STEPS } from '../data/content';
 
-const WHEEL_SLICES = ['10% OFF', 'Envío gratis', '50 pts', '20% OFF', 'Intenta otra vez', 'Regalo'];
+const WHEEL_SLICES = [
+  { label: '10% OFF', icon: '🏷️' },
+  { label: 'Envío gratis', icon: '📦' },
+  { label: '50 pts', icon: '⭐' },
+  { label: '20% OFF', icon: '💰' },
+  { label: 'Intenta otra vez', icon: '🔄' },
+  { label: 'Regalo', icon: '🎁' },
+] as const;
+const WHEEL_SEGMENT_ANGLE = 360 / WHEEL_SLICES.length;
+
+function getSliceIndexFromRotation(degrees: number): number {
+  const normalized = ((degrees % 360) + 360) % 360;
+  const angleAtPointer = (360 - normalized) % 360;
+  return Math.floor(angleAtPointer / WHEEL_SEGMENT_ANGLE) % WHEEL_SLICES.length;
+}
 
 export function CampanasShowcaseCenter() {
   const [activeStep, setActiveStep] = useState(1);
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
+  const rotationRef = useRef(0);
   const [prize, setPrize] = useState<string | null>(null);
   const [formStep, setFormStep] = useState(0);
   const [prizeRevealed, setPrizeRevealed] = useState(false);
@@ -17,19 +32,26 @@ export function CampanasShowcaseCenter() {
 
   const spinWheel = () => {
     if (spinning) return;
-    const segment = Math.floor(Math.random() * 6);
+    const segment = Math.floor(Math.random() * WHEEL_SLICES.length);
     setPrize(null);
     setSpinning(true);
 
+    const sliceCenter = segment * WHEEL_SEGMENT_ANGLE + WHEEL_SEGMENT_ANGLE / 2;
+    const currentMod = ((rotationRef.current % 360) + 360) % 360;
+    const targetMod = (360 - sliceCenter + 360) % 360;
+    const delta = (targetMod - currentMod + 360) % 360;
+    const nextRotation = rotationRef.current + 360 * 5 + delta;
+
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        setRotation((r) => r + 360 * 5 + segment * 60 + 30);
+        rotationRef.current = nextRotation;
+        setRotation(nextRotation);
       });
     });
 
     setTimeout(() => {
       setSpinning(false);
-      setPrize(WHEEL_SLICES[segment]);
+      setPrize(WHEEL_SLICES[getSliceIndexFromRotation(nextRotation)].label);
       setActiveStep(2);
     }, 4000);
   };
@@ -54,7 +76,6 @@ export function CampanasShowcaseCenter() {
           const isActive = activeStep === index;
           return (
             <div key={step.title} className="dok7-showcase-funnel-item">
-              {index > 0 && <div className="dok7-showcase-funnel-arrow">→</div>}
               <button
                 type="button"
                 className={`dok7-showcase-funnel-step ${isActive ? 'dok7-showcase-funnel-step--active' : ''}`}
@@ -65,7 +86,7 @@ export function CampanasShowcaseCenter() {
                   {index === 0 && (
                     <div className="dok7-showcase-ad-mock">
                       <div className="dok7-showcase-ad-banner">¡Juega y gana!</div>
-                      <div className="dok7-showcase-ad-cta dok7-showcase-ad-cta--pulse">Participar →</div>
+                      <div className="dok7-showcase-ad-cta dok7-showcase-ad-cta--pulse">Participar</div>
                     </div>
                   )}
                   {index === 1 && (
@@ -75,9 +96,16 @@ export function CampanasShowcaseCenter() {
                         className={`dok7-showcase-mini-wheel ${spinning ? 'dok7-showcase-mini-wheel--spinning' : ''}`}
                         style={{ transform: `rotate(${rotation}deg)` }}
                       >
-                        {WHEEL_SLICES.map((p, i) => (
-                          <span key={p} style={{ '--slice-rotate': `${i * 60 + 30}deg` } as React.CSSProperties}>
-                            {p.slice(0, 4)}
+                        {WHEEL_SLICES.map((slice, i) => (
+                          <span
+                            key={slice.label}
+                            className="dok7-showcase-mini-wheel-segment"
+                            style={{
+                              transform: `rotate(${i * WHEEL_SEGMENT_ANGLE}deg) translateY(calc(-1 * var(--mini-wheel-segment-radius)))`,
+                            }}
+                            aria-hidden="true"
+                          >
+                            {slice.icon}
                           </span>
                         ))}
                       </div>
@@ -112,7 +140,7 @@ export function CampanasShowcaseCenter() {
       <div className="dok7-showcase-campanas-actions">
         {activeStep === 0 && (
           <button type="button" className="dok7-showcase-action dok7-showcase-action--blue" onClick={() => setActiveStep(1)}>
-            Simular clic en anuncio →
+            Simular clic en anuncio
           </button>
         )}
         {activeStep === 1 && (
@@ -138,12 +166,18 @@ export function CampanasShowcaseCenter() {
         )}
 
         <Link href="#contacto" className="dok7-showcase-link-cta">
-          Crear una campaña →
+          Crear una campaña
         </Link>
       </div>
 
       {prize && activeStep >= 1 && (
-        <p className="dok7-showcase-campanas-prize">Último premio: <strong>{prize}</strong></p>
+        <p className="dok7-showcase-campanas-prize">
+          {prize.toLowerCase() === 'intenta otra vez' ? (
+            <>Resultado: <strong>{prize}</strong></>
+          ) : (
+            <>Último premio: <strong>{prize}</strong></>
+          )}
+        </p>
       )}
     </div>
   );

@@ -129,12 +129,16 @@ function RuletaPreview({ accent }: { accent: string }) {
     <div className="dok7-dyn-preview dok7-dyn-preview--ruleta">
       <div className="dok7-dyn-wheel dok7-dyn-wheel--spin">
         {['🎁', '⭐', '🎯', '💎', '🏆', '🎉'].map((emoji, i) => (
-          <span key={i} className="dok7-dyn-wheel-segment" style={{ transform: `rotate(${i * 60}deg)` }}>
+          <span
+            key={i}
+            className="dok7-dyn-wheel-segment"
+            style={{ transform: `rotate(${i * 60}deg) translateY(calc(-1 * var(--wheel-segment-radius)))` }}
+          >
             {emoji}
           </span>
         ))}
       </div>
-      <div className="dok7-dyn-wheel-pointer" style={{ borderBottomColor: accent }} />
+      <div className="dok7-dyn-wheel-pointer" style={{ borderTopColor: accent }} />
     </div>
   );
 }
