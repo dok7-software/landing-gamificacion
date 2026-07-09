@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
+  basePath: '/gamificacion',
   outputFileTracingRoot: path.join(__dirname),
 };
 
