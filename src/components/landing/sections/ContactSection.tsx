@@ -10,7 +10,6 @@ interface ContactFormState {
   company: string;
   email: string;
   projectType: string;
-  objective: string;
   message: string;
 }
 
@@ -19,7 +18,6 @@ const INITIAL_FORM: ContactFormState = {
   company: '',
   email: '',
   projectType: CONTACT_FORM_OPTIONS.projectType[0],
-  objective: CONTACT_FORM_OPTIONS.objective[0],
   message: '',
 };
 
@@ -68,11 +66,8 @@ export function ContactSection() {
                 <FormField label="Empresa" placeholder="Ej.: Tu empresa" value={form.company} onChange={(v) => updateField('company', v)} />
               </div>
               <div className="dok7-form-row">
-                <FormField label="Email corporativo" placeholder="ejemplo@empresa.com" type="email" value={form.email} onChange={(v) => updateField('email', v)} required />
+                <FormField label="Email" placeholder="ejemplo@empresa.com" type="email" value={form.email} onChange={(v) => updateField('email', v)} required />
                 <FormSelect label="¿Qué quieres crear?" options={CONTACT_FORM_OPTIONS.projectType} value={form.projectType} onChange={(v) => updateField('projectType', v)} />
-              </div>
-              <div style={{ marginBottom: 20 }}>
-                <FormSelect label="Objetivo principal" options={CONTACT_FORM_OPTIONS.objective} value={form.objective} onChange={(v) => updateField('objective', v)} />
               </div>
               <div style={{ marginBottom: 24 }}>
                 <FormTextarea
@@ -86,7 +81,7 @@ export function ContactSection() {
                 type="submit"
                 style={{ width: '100%', padding: 18, background: 'linear-gradient(135deg,#6c3aed,#7c5cfc)', border: 'none', borderRadius: 14, color: 'white', fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
               >
-                Solicitar propuesta
+                Contacto
               </button>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 20 }}>
                 <LockIcon />

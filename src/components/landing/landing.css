@@ -27,6 +27,11 @@
   gap: 40px;
 }
 
+.dok7-nav-link--active {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
 .dok7-nav-cta {
   flex-shrink: 0;
 }
@@ -392,10 +397,7 @@
   }
 
   .dok7-objetivo-illustration {
-    grid-column: 1 / -1;
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto 12px;
+    display: none;
   }
 
   .dok7-objetivo-card {
@@ -778,11 +780,12 @@
 
 .dok7-dyn-preview--ruleta {
   position: relative;
+  --wheel-size: 120px;
 }
 
 .dok7-dyn-wheel {
-  width: 120px;
-  height: 120px;
+  width: var(--wheel-size);
+  height: var(--wheel-size);
   min-width: 120px;
   min-height: 120px;
   aspect-ratio: 1;
@@ -829,7 +832,7 @@
 
 .dok7-dyn-wheel-pointer {
   position: absolute;
-  top: -2px;
+  top: calc(50% - (var(--wheel-size) / 2));
   left: 50%;
   transform: translateX(-50%);
   width: 0;
@@ -1788,6 +1791,7 @@
 }
 
 .dok7-showcase-feature-preview .dok7-dyn-preview--ruleta {
+  --wheel-size: 58px;
   width: 58px;
   height: 58px;
   padding: 0;
@@ -1815,6 +1819,37 @@
   border-right-width: 4px;
   border-top-width: 7px;
   border-bottom: none;
+}
+
+.dok7-showcase-feature-preview .dok7-dyn-preview--memoria {
+  gap: 4px;
+  transform: none;
+}
+
+.dok7-showcase-feature-preview .dok7-dyn-memory-board {
+  grid-template-columns: repeat(2, 26px);
+  grid-template-rows: repeat(2, 26px);
+  gap: 4px;
+}
+
+.dok7-showcase-feature-preview .dok7-dyn-memory-tile {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.dok7-showcase-feature-preview .dok7-dyn-memory-tile--face-down {
+  font-size: 11px;
+}
+
+.dok7-showcase-feature-preview .dok7-dyn-memory-tile--flip .dok7-dyn-memory-tile-back,
+.dok7-showcase-feature-preview .dok7-dyn-memory-tile--flip .dok7-dyn-memory-tile-front {
+  border-radius: 6px;
+}
+
+.dok7-showcase-feature-preview .dok7-dyn-memory-hint {
+  font-size: 8px;
 }
 
 .dok7-showcase-feature-chip span:last-child {
@@ -2273,11 +2308,11 @@
 .dok7-showcase-funnel {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 12px;
   overflow-x: auto;
   overflow-y: visible;
   max-width: 100%;
-  padding: 6px 4px 10px;
+  padding: 8px 6px 12px;
   scrollbar-width: thin;
 }
 
@@ -2293,14 +2328,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: none;
   border: 1px solid transparent;
   border-radius: 16px;
   cursor: pointer;
   font-family: inherit;
-  padding: 6px;
-  min-width: 100px;
+  padding: 8px;
+  min-width: 116px;
   transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
   box-sizing: border-box;
 }
@@ -2312,8 +2347,8 @@
 }
 
 .dok7-showcase-funnel-visual {
-  width: 100px;
-  height: 120px;
+  width: 116px;
+  height: 138px;
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(108, 58, 237, 0.12));
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -2339,23 +2374,23 @@
 
 .dok7-showcase-funnel-title {
   color: white;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .dok7-showcase-funnel-sub {
   color: rgba(255, 255, 255, 0.4);
-  font-size: 10px;
+  font-size: 11px;
   text-align: center;
-  max-width: 100px;
+  max-width: 116px;
   line-height: 1.3;
 }
 
 .dok7-showcase-ad-mock {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 10px;
+  gap: 10px;
+  padding: 12px;
   width: 100%;
 }
 
@@ -2363,7 +2398,7 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 12px 8px;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   color: white;
   text-align: center;
@@ -2372,9 +2407,9 @@
 .dok7-showcase-ad-cta {
   background: #3b82f6;
   color: white;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
-  padding: 6px;
+  padding: 7px;
   border-radius: 6px;
   text-align: center;
 }
@@ -2390,8 +2425,8 @@
 
 .dok7-showcase-mini-wheel-wrap {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 92px;
+  height: 92px;
 }
 
 .dok7-showcase-mini-wheel-pointer {
@@ -2409,9 +2444,9 @@
 }
 
 .dok7-showcase-mini-wheel {
-  width: 80px;
-  height: 80px;
-  --mini-wheel-segment-radius: 28px;
+  width: 92px;
+  height: 92px;
+  --mini-wheel-segment-radius: 32px;
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.2);
   position: relative;
@@ -2443,24 +2478,24 @@
   align-items: center;
   justify-content: center;
   transform-origin: center center;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1;
 }
 
 .dok7-showcase-form-mock {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 10px;
+  gap: 8px;
+  padding: 12px;
   width: 100%;
 }
 
 .dok7-showcase-form-field {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 6px 8px;
-  font-size: 8px;
+  border-radius: 5px;
+  padding: 7px 9px;
+  font-size: 9px;
   color: rgba(255, 255, 255, 0.35);
   transition: all 0.3s;
 }
@@ -2504,13 +2539,13 @@
 }
 
 .dok7-showcase-prize-emoji {
-  font-size: 28px;
+  font-size: 32px;
   line-height: 1;
   transition: transform 0.4s;
 }
 
 .dok7-showcase-prize-text {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   color: #fbbf24;
   line-height: 1.2;
@@ -2551,16 +2586,6 @@
 
 .dok7-showcase-link-cta:hover {
   color: #60a5fa;
-}
-
-.dok7-showcase-campanas-prize {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-}
-
-.dok7-showcase-campanas-prize strong {
-  color: #fbbf24;
 }
 
 /* Live ranking widget */
@@ -3218,8 +3243,11 @@
     height: 64px;
     flex-shrink: 0;
     border-radius: 10px;
-    overflow: visible;
+    overflow: hidden;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .dok7-showcase-funnel-step--active .dok7-showcase-funnel-visual {
@@ -3227,6 +3255,49 @@
     height: 64px;
     border-color: rgba(96, 165, 250, 0.55);
     box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.2);
+  }
+
+  .dok7-showcase-funnel-visual .dok7-showcase-ad-mock,
+  .dok7-showcase-funnel-visual .dok7-showcase-form-mock {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    gap: 3px;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  .dok7-showcase-ad-banner {
+    padding: 4px 2px;
+    font-size: 6px;
+    line-height: 1.2;
+    border-radius: 4px;
+  }
+
+  .dok7-showcase-ad-cta {
+    font-size: 6px;
+    padding: 3px;
+    border-radius: 4px;
+  }
+
+  .dok7-showcase-form-field {
+    padding: 2px 4px;
+    font-size: 5px;
+    line-height: 1.2;
+    border-radius: 3px;
+  }
+
+  .dok7-showcase-prize-mock {
+    padding: 4px 2px;
+    gap: 2px;
+  }
+
+  .dok7-showcase-prize-emoji {
+    font-size: 22px;
+  }
+
+  .dok7-showcase-prize-text {
+    font-size: 7px;
   }
 
   .dok7-showcase-funnel-text {
@@ -3287,11 +3358,6 @@
   .dok7-showcase-link-cta {
     text-align: center;
     width: 100%;
-  }
-
-  .dok7-showcase-campanas-prize {
-    text-align: center;
-    font-size: 12px;
   }
 
   .dok7-showcase-ranking-btn {

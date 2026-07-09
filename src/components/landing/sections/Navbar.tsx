@@ -4,13 +4,26 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { NAV_ITEMS } from '../data/content';
 import { CloseIcon, MenuIcon } from '../icons';
+import type { TabId } from '../types';
 
 const LOGO_SRC = '/Logo-completo_blanco_sin-fondo.png';
 
-export function Navbar() {
+interface NavbarProps {
+  activeTab: TabId;
+  onTabChange: (tab: TabId) => void;
+}
+
+export function Navbar({ activeTab, onTabChange }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
+
+  const handleNavClick = (tabId?: TabId) => {
+    if (tabId) {
+      onTabChange(tabId);
+    }
+    closeMenu();
+  };
 
   return (
     <nav
@@ -27,7 +40,7 @@ export function Navbar() {
         background: 'rgba(11,11,26,0.92)',
       }}
     >
-      <a href="#" className="dok7-nav-logo" aria-label="DOK7 - Inicio">
+      <a href="https://dok7.io" className="dok7-nav-logo" aria-label="DOK7">
         <Image
           src={LOGO_SRC}
           alt="DOK7"
@@ -40,7 +53,13 @@ export function Navbar() {
 
       <div className="dok7-nav-links">
         {NAV_ITEMS.map((item) => (
-          <a key={item.href} href={item.href} style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}>
+          <a
+            key={item.label}
+            href={item.href}
+            className={item.tabId && activeTab === item.tabId ? 'dok7-nav-link dok7-nav-link--active' : 'dok7-nav-link'}
+            style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}
+            onClick={() => handleNavClick(item.tabId)}
+          >
             {item.label}
           </a>
         ))}
@@ -51,12 +70,17 @@ export function Navbar() {
       </button>
 
       <a href="#contacto" className="dok7-nav-cta" style={{ background: '#6c3aed', border: '2px solid #6c3aed', color: 'white', padding: '12px 28px', borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: 'pointer', textDecoration: 'none' }}>
-        Solicitar propuesta
+        Contacto
       </a>
 
       <div className={`dok7-nav-mobile-menu${menuOpen ? ' open' : ''}`}>
         {NAV_ITEMS.map((item) => (
-          <a key={item.href} href={item.href} onClick={closeMenu}>
+          <a
+            key={item.label}
+            href={item.href}
+            className={item.tabId && activeTab === item.tabId ? 'dok7-nav-link dok7-nav-link--active' : 'dok7-nav-link'}
+            onClick={() => handleNavClick(item.tabId)}
+          >
             {item.label}
           </a>
         ))}
@@ -65,7 +89,7 @@ export function Navbar() {
           onClick={closeMenu}
           style={{ background: '#6c3aed', border: 'none', color: 'white', padding: '14px 24px', borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: 'pointer', marginTop: 12, width: '100%', textAlign: 'center', textDecoration: 'none' }}
         >
-          Solicitar propuesta
+          Contacto
         </a>
       </div>
     </nav>

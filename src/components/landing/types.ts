@@ -3,6 +3,7 @@ export type TabId = 'eventos' | 'campanas';
 export interface NavItem {
   label: string;
   href: string;
+  tabId?: TabId;
 }
 
 export interface FaqItem {

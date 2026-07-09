@@ -8,8 +8,8 @@ import type {
 } from '../types';
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Eventos', href: '#showcase' },
-  { label: 'Campañas', href: '#showcase' },
+  { label: 'Eventos', href: '#showcase', tabId: 'eventos' },
+  { label: 'Campañas', href: '#showcase', tabId: 'campanas' },
   { label: 'Dinámicas', href: '#dinamicas' },
   { label: 'Cómo funciona', href: '#objetivo' },
   { label: 'FAQ', href: '#faq' },
@@ -18,7 +18,7 @@ export const NAV_ITEMS: NavItem[] = [
 export const FAQ_ITEMS: FaqItem[] = [
   {
     question: '¿Los usuarios necesitan descargar una app?',
-    answer: 'No. Nuestras dinámicas funcionan desde el navegador del móvil, sin descargas ni instalaciones.',
+    answer: 'Nuestras dinámicas funcionan desde el navegador del móvil. Sin embargo, si tu objetivo es crear una app o ya tienes una, podemos desarrollarlo.',
   },
   {
     question: '¿Qué diferencia hay entre gamificación para eventos y campañas?',
@@ -26,7 +26,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     question: '¿Se puede usar en eventos presenciales?',
-    answer: 'Sí. Creamos recorridos con QR, pasaportes digitales, retos, rankings, trivias y más, todo desde el móvil.',
+    answer: 'Sí. Creamos recorridos con QR, NFC, pasaportes digitales, retos, rankings, trivias y más, todo desde el móvil.',
   },
   {
     question: '¿Se puede conectar con nuestro CRM?',
@@ -38,7 +38,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     question: '¿Podemos reutilizar la solución?',
-    answer: 'Sí. Desarrollamos una base flexible para lanzar múltiples eventos o campañas cambiando contenidos, reglas, premios y diseño.',
+    answer: 'Sí. Puedes reutilizar la misma experiencia en distintos eventos o campañas, adaptando contenidos, reglas, premios y diseño sin empezar desde cero.',
   },
 ];
 
@@ -78,7 +78,7 @@ export const CAMPANA_BENEFITS = [
 
 export const OBJETIVO_LEFT_BENEFITS: BenefitItem[] = [
   { title: 'Más participación', description: 'Asistentes o usuarios completan acciones dentro de la experiencia.' },
-  { title: 'Más recuerdo de marca', description: 'Una experiencia interactiva se recuerda más que una acción estática.' },
+  { title: 'Más recuerdo de marca', description: 'Una experiencia interactiva tiene una alta tasa de recuerdo.' },
 ];
 
 export const OBJETIVO_RIGHT_BENEFITS: BenefitItem[] = [
@@ -88,6 +88,5 @@ export const OBJETIVO_RIGHT_BENEFITS: BenefitItem[] = [
 ];
 
 export const CONTACT_FORM_OPTIONS = {
-  projectType: ['Selecciona una opción', 'Evento', 'Campaña'],
-  objective: ['Selecciona una opción', 'Más participación', 'Más leads', 'Más tráfico'],
+  projectType: ['Selecciona una opción', 'Evento', 'Campaña', 'Otro'],
 };

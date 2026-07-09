@@ -47,7 +47,11 @@ export function DinamicasSection() {
       <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '16px 28px', maxWidth: 500, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
         <LightbulbIcon />
         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>
-          Haz <span style={{ color: '#7c5cfc', textDecoration: 'underline' }}>clic</span> en una dinámica para probarla en vivo.
+          Descubre todas las{' '}
+          <a href="#contacto" style={{ color: '#7c5cfc', textDecoration: 'underline' }}>
+            dinámicas
+          </a>{' '}
+          que tenemos para ti.
         </span>
       </div>
 

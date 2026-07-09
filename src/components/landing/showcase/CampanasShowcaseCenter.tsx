@@ -17,7 +17,7 @@ const WHEEL_SEGMENT_ANGLE = 360 / WHEEL_SLICES.length;
 function getSliceIndexFromRotation(degrees: number): number {
   const normalized = ((degrees % 360) + 360) % 360;
   const angleAtPointer = (360 - normalized) % 360;
-  return Math.floor(angleAtPointer / WHEEL_SEGMENT_ANGLE) % WHEEL_SLICES.length;
+  return Math.round(angleAtPointer / WHEEL_SEGMENT_ANGLE) % WHEEL_SLICES.length;
 }
 
 export function CampanasShowcaseCenter() {
@@ -36,9 +36,9 @@ export function CampanasShowcaseCenter() {
     setPrize(null);
     setSpinning(true);
 
-    const sliceCenter = segment * WHEEL_SEGMENT_ANGLE + WHEEL_SEGMENT_ANGLE / 2;
+    const sliceAngle = segment * WHEEL_SEGMENT_ANGLE;
     const currentMod = ((rotationRef.current % 360) + 360) % 360;
-    const targetMod = (360 - sliceCenter + 360) % 360;
+    const targetMod = (360 - sliceAngle) % 360;
     const delta = (targetMod - currentMod + 360) % 360;
     const nextRotation = rotationRef.current + 360 * 5 + delta;
 
@@ -169,16 +169,6 @@ export function CampanasShowcaseCenter() {
           Crear una campaña
         </Link>
       </div>
-
-      {prize && activeStep >= 1 && (
-        <p className="dok7-showcase-campanas-prize">
-          {prize.toLowerCase() === 'intenta otra vez' ? (
-            <>Resultado: <strong>{prize}</strong></>
-          ) : (
-            <>Último premio: <strong>{prize}</strong></>
-          )}
-        </p>
-      )}
     </div>
   );
 }

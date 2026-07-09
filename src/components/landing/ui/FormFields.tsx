@@ -49,16 +49,19 @@ interface FormSelectProps {
 }
 
 export function FormSelect({ label, options, value, onChange }: FormSelectProps) {
+  const selectedValue = value ?? options[0];
+  const isPlaceholder = selectedValue === options[0];
+
   return (
     <div>
       <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'white', marginBottom: 8 }}>{label}</label>
       <select
-        value={value}
+        value={selectedValue}
         onChange={(e) => onChange?.(e.target.value)}
-        style={{ ...inputStyle, color: 'rgba(255,255,255,0.5)', appearance: 'none', cursor: 'pointer' }}
+        style={{ ...inputStyle, color: isPlaceholder ? 'rgba(255,255,255,0.5)' : '#ffffff', appearance: 'none', cursor: 'pointer' }}
       >
         {options.map((option) => (
-          <option key={option} value={option}>
+          <option key={option} value={option} style={{ backgroundColor: '#10142a', color: '#ffffff' }}>
             {option}
           </option>
         ))}

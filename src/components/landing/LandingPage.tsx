@@ -16,7 +16,7 @@ export default function LandingPage() {
 
   return (
     <div className="dok7-landing" style={{ background: '#0b0b1a', fontFamily: "'Inter', system-ui, sans-serif" }}>
-      <Navbar />
+      <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
       <Hero />
       <ShowcaseSection activeTab={activeTab} onTabChange={setActiveTab} />
       <ObjetivoSection />
