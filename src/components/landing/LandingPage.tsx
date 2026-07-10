@@ -9,6 +9,7 @@ import { Hero } from './sections/Hero';
 import { Navbar } from './sections/Navbar';
 import { ObjetivoSection } from './sections/ObjetivoSection';
 import { ShowcaseSection } from './sections/ShowcaseSection';
+import { ScrollToTopButton } from './ui/ScrollToTopButton';
 import './landing.css';
 
 export default function LandingPage() {
@@ -23,6 +24,7 @@ export default function LandingPage() {
       <DinamicasSection />
       <FaqSection />
       <ContactSection />
+      <ScrollToTopButton />
     </div>
   );
 }
