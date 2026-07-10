@@ -24,14 +24,38 @@ const INITIAL_FORM: ContactFormState = {
 export function ContactSection() {
   const [form, setForm] = useState<ContactFormState>(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const updateField = <K extends keyof ContactFormState>(field: K, value: ContactFormState[K]) => {
     setForm((current) => ({ ...current, [field]: value }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        setError(data.error ?? 'No se pudo enviar el mensaje. Inténtalo de nuevo.');
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError('Error de conexión. Inténtalo de nuevo.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -77,11 +101,17 @@ export function ContactSection() {
                   onChange={(v) => updateField('message', v)}
                 />
               </div>
+              {error && (
+                <p style={{ color: '#f87171', fontSize: 14, margin: '0 0 16px', lineHeight: 1.5 }}>
+                  {error}
+                </p>
+              )}
               <button
                 type="submit"
-                style={{ width: '100%', padding: 18, background: 'linear-gradient(135deg,#6c3aed,#7c5cfc)', border: 'none', borderRadius: 14, color: 'white', fontSize: 17, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
+                disabled={submitting}
+                style={{ width: '100%', padding: 18, background: 'linear-gradient(135deg,#6c3aed,#7c5cfc)', border: 'none', borderRadius: 14, color: 'white', fontSize: 17, fontWeight: 700, cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.7 : 1, fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
               >
-                Contacto
+                {submitting ? 'Enviando...' : 'Enviar'}
               </button>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 20 }}>
                 <LockIcon />
