@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { FAQ_ITEMS } from '../data/content';
+import { ChevronUpIcon } from '../icons';
 export function FaqSection() {
   const [openIndex, setOpenIndex] = useState(-1);
 
@@ -49,9 +50,12 @@ export function FaqSection() {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => toggle(index)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit' }}
+                className="dok7-faq-trigger"
               >
-                <span style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{faq.question}</span>
+                <span className="dok7-faq-question">{faq.question}</span>
+                <span className={`dok7-faq-chevron${isOpen ? ' dok7-faq-chevron--open' : ''}`} aria-hidden="true">
+                  <ChevronUpIcon size={20} color="#6c3aed" />
+                </span>
               </button>
               {isOpen && (
                 <p id={panelId} role="region" aria-labelledby={headingId} style={{ margin: '12px 0 0', fontSize: 14, color: 'rgba(15,23,42,0.6)', lineHeight: 1.6 }}>
