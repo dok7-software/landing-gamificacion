@@ -116,7 +116,7 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
 
             <div className="dok7-showcase-phone-app">
               <div className="dok7-showcase-phone-header">
-                <span>DOK7 Event</span>
+                <span>Evento DOK7</span>
               </div>
 
               <div className="dok7-showcase-phone-scenes" role="tablist">

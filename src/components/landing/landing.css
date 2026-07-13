@@ -297,13 +297,25 @@
 }
 
 /* ─── Tab bar ──────────────────────────────────────────── */
+.dok7-showcase-tab-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .dok7-tabbar {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0 64px;
   gap: 0;
   position: relative;
-  z-index: 2;
+  z-index: 10;
 }
 
 .dok7-tab {
@@ -318,12 +330,13 @@
   cursor: pointer;
   text-align: left;
   font-family: inherit;
+  user-select: none;
+  -webkit-user-select: none;
   transition:
     transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1),
     box-shadow 0.35s ease,
     background 0.35s ease,
     filter 0.35s ease;
-  will-change: transform;
 }
 
 .dok7-tab--eventos {
@@ -338,12 +351,10 @@
 
 .dok7-tab--eventos.dok7-tab--active {
   background: #5b21b6;
-  z-index: 2;
 }
 
 .dok7-tab--campanas.dok7-tab--active {
   background: #1e40af;
-  z-index: 2;
 }
 
 .dok7-tab-shine {
@@ -418,89 +429,118 @@
   transition: color 0.35s ease, opacity 0.35s ease;
 }
 
-/* Hover & active — Eventos */
-.dok7-tab--eventos:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 32px rgba(91, 33, 182, 0.45);
-  filter: brightness(1.08);
+/* Hover & active — Eventos (solo puntero fino; evita solapamiento táctil) */
+@media (hover: hover) and (pointer: fine) {
+  .dok7-tab--eventos:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(91, 33, 182, 0.45);
+    filter: brightness(1.08);
+  }
+
+  .dok7-tab--eventos:hover .dok7-tab-shine {
+    transform: translateX(120%);
+  }
+
+  .dok7-tab--eventos:hover .dok7-tab-glow,
+  .dok7-tab--eventos.dok7-tab--active .dok7-tab-glow {
+    opacity: 1;
+  }
+
+  .dok7-tab--eventos:hover .dok7-tab-icon,
+  .dok7-tab--eventos.dok7-tab--active .dok7-tab-icon {
+    transform: scale(1.1) rotate(-4deg);
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 4px 16px rgba(124, 92, 252, 0.4);
+  }
+
+  .dok7-tab--eventos:hover .tab-title,
+  .dok7-tab--eventos.dok7-tab--active .tab-title {
+    letter-spacing: 1px;
+  }
+
+  .dok7-tab--eventos:hover .tab-sub,
+  .dok7-tab--eventos.dok7-tab--active .tab-sub {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .dok7-tab--eventos.dok7-tab--active {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 28px rgba(91, 33, 182, 0.5);
+  }
+
+  /* Hover & active — Campañas */
+  .dok7-tab--campanas:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(30, 64, 175, 0.45);
+    filter: brightness(1.08);
+  }
+
+  .dok7-tab--campanas:hover .dok7-tab-shine {
+    transform: translateX(120%);
+  }
+
+  .dok7-tab--campanas:hover .dok7-tab-glow,
+  .dok7-tab--campanas.dok7-tab--active .dok7-tab-glow {
+    opacity: 1;
+  }
+
+  .dok7-tab--campanas:hover .dok7-tab-icon,
+  .dok7-tab--campanas.dok7-tab--active .dok7-tab-icon {
+    transform: scale(1.1) rotate(4deg);
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+  }
+
+  .dok7-tab--campanas:hover .tab-title,
+  .dok7-tab--campanas.dok7-tab--active .tab-title {
+    letter-spacing: 1px;
+  }
+
+  .dok7-tab--campanas:hover .tab-sub,
+  .dok7-tab--campanas.dok7-tab--active .tab-sub {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .dok7-tab--campanas.dok7-tab--active {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 28px rgba(30, 64, 175, 0.5);
+  }
+
+  .dok7-tab:active {
+    transform: translateY(0) scale(0.99);
+    transition-duration: 0.12s;
+  }
 }
 
-.dok7-tab--eventos:hover .dok7-tab-shine {
-  transform: translateX(120%);
-}
-
-.dok7-tab--eventos:hover .dok7-tab-glow,
-.dok7-tab--eventos.dok7-tab--active .dok7-tab-glow {
-  opacity: 1;
-}
-
-.dok7-tab--eventos:hover .dok7-tab-icon,
-.dok7-tab--eventos.dok7-tab--active .dok7-tab-icon {
-  transform: scale(1.1) rotate(-4deg);
-  background: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 4px 16px rgba(124, 92, 252, 0.4);
-}
-
-.dok7-tab--eventos:hover .tab-title,
-.dok7-tab--eventos.dok7-tab--active .tab-title {
-  letter-spacing: 1px;
-}
-
-.dok7-tab--eventos:hover .tab-sub,
-.dok7-tab--eventos.dok7-tab--active .tab-sub {
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.dok7-tab--eventos.dok7-tab--active {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 8px 28px rgba(91, 33, 182, 0.5);
-}
-
-/* Hover & active — Campañas */
-.dok7-tab--campanas:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 32px rgba(30, 64, 175, 0.45);
-  filter: brightness(1.08);
-}
-
-.dok7-tab--campanas:hover .dok7-tab-shine {
-  transform: translateX(120%);
-}
-
-.dok7-tab--campanas:hover .dok7-tab-glow,
+.dok7-tab--eventos.dok7-tab--active .dok7-tab-glow,
 .dok7-tab--campanas.dok7-tab--active .dok7-tab-glow {
   opacity: 1;
 }
 
-.dok7-tab--campanas:hover .dok7-tab-icon,
-.dok7-tab--campanas.dok7-tab--active .dok7-tab-icon {
-  transform: scale(1.1) rotate(4deg);
-  background: rgba(255, 255, 255, 0.22);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-}
-
-.dok7-tab--campanas:hover .tab-title,
-.dok7-tab--campanas.dok7-tab--active .tab-title {
-  letter-spacing: 1px;
-}
-
-.dok7-tab--campanas:hover .tab-sub,
-.dok7-tab--campanas.dok7-tab--active .tab-sub {
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.dok7-tab--campanas.dok7-tab--active {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 8px 28px rgba(30, 64, 175, 0.5);
-}
-
-.dok7-tab:active {
-  transform: translateY(0) scale(0.99);
-  transition-duration: 0.12s;
-}
-
+.dok7-tabbar > label,
 .dok7-tabbar > button {
   min-width: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Showcase shell (tabs + panel) ───────────────────── */
+.dok7-showcase-shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  position: relative;
+  isolation: isolate;
+}
+
+.dok7-showcase-shell .dok7-tabbar {
+  grid-row: 1;
+  z-index: 10;
+}
+
+.dok7-showcase-shell .dok7-section--panels {
+  grid-row: 2;
+  position: relative;
+  z-index: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3993,10 +4033,23 @@
     color: #93c5fd;
   }
 
-  .dok7-showcase-eventos,
-  .dok7-showcase-campanas-wrap {
+  .dok7-showcase-eventos {
     min-height: 560px;
     height: auto;
+  }
+
+  .dok7-showcase-campanas-wrap {
+    min-height: 0;
+    height: auto;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+  }
+
+  .dok7-panel--campanas .dok7-panel-center--showcase {
+    min-height: 0;
+    height: auto;
+    justify-content: flex-start;
+    align-items: stretch;
   }
 
   .dok7-showcase-campanas {
@@ -4261,11 +4314,13 @@
     grid-template-columns: 1fr 1fr !important;
   }
 
+  .dok7-tabbar > label:first-child,
   .dok7-tabbar > button:first-child,
   .dok7-tab--eventos {
     border-radius: 16px 0 0 0 !important;
   }
 
+  .dok7-tabbar > label:last-child,
   .dok7-tabbar > button:last-child,
   .dok7-tab--campanas {
     border-radius: 0 16px 0 0 !important;
@@ -4274,25 +4329,13 @@
   .dok7-tab {
     padding: 16px 12px !important;
     gap: 10px !important;
-  }
-
-  .dok7-tab:hover {
-    transform: translateY(-2px) scale(1.015);
-  }
-
-  .dok7-tab--active {
-    transform: translateY(-1px) scale(1.01);
+    will-change: auto;
   }
 
   .dok7-tab-icon {
     width: 36px !important;
     height: 36px !important;
     border-radius: 10px !important;
-  }
-
-  .dok7-tab:hover .dok7-tab-icon,
-  .dok7-tab--active .dok7-tab-icon {
-    transform: scale(1.06);
   }
 
   .dok7-objetivo-visual {
@@ -4399,9 +4442,12 @@
     max-width: 100%;
   }
 
-  .dok7-panel--eventos,
-  .dok7-panel--campanas {
+  .dok7-panel--eventos {
     --dok7-showcase-center-height: 480px;
+  }
+
+  .dok7-panel--campanas {
+    --dok7-showcase-center-height: auto;
   }
 
   .dok7-panel-center--showcase {
@@ -4412,6 +4458,14 @@
   }
 
   .dok7-panel--campanas .dok7-panel-center--showcase {
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .dok7-panel--eventos .dok7-panel-center--showcase {
     overflow: hidden;
   }
 
@@ -4498,16 +4552,20 @@
   .dok7-showcase-campanas-wrap {
     width: 100%;
     max-width: 100%;
-    min-height: 100%;
-    overflow: hidden;
+    min-height: 0;
+    height: auto;
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    align-self: stretch;
+    overflow: visible;
   }
 
   .dok7-showcase-campanas {
     width: 100%;
     max-width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 22px 14px;
+    overflow: visible;
+    gap: 12px;
+    padding: 16px 14px 12px;
   }
 
   .dok7-showcase-funnel {
@@ -4516,9 +4574,9 @@
     width: 100%;
     max-width: min(520px, 100%);
     margin: 0 auto;
-    gap: 10px;
+    gap: 8px;
     overflow: visible;
-    padding: 4px 2px;
+    padding: 0;
   }
 
   .dok7-showcase-funnel-item {
@@ -4537,8 +4595,8 @@
     min-width: unset;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 14px 12px;
+    gap: 8px;
+    padding: 10px 12px;
     background: rgba(255, 255, 255, 0.04);
     border-radius: 12px;
     border: 1px solid transparent;
@@ -4661,20 +4719,31 @@
 
   .dok7-showcase-campanas-actions {
     flex-direction: column;
+    align-items: center;
     width: 100%;
-    gap: 10px;
-    margin-top: 16px;
+    gap: 8px;
+    margin-top: 4px;
   }
 
   .dok7-showcase-action--blue {
-    width: 100%;
-    font-size: 14px;
-    padding: 14px 16px;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: min(260px, 100%);
+    font-size: 12px;
+    padding: 10px 18px;
+    line-height: 1.3;
+    white-space: normal;
+    text-align: center;
   }
 
   .dok7-showcase-link-cta {
+    flex: 0 0 auto;
     text-align: center;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 1.3;
+    padding: 0;
   }
 
   .dok7-showcase-ranking-btn {

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import type { TabId } from './types';
 import { useLandingAnalytics } from './hooks/useLandingAnalytics';
 import { DinamicasSection } from './sections/DinamicasSection';
 import { ContactSection } from './sections/ContactSection';
@@ -13,7 +12,6 @@ import { ScrollToTopButton } from './ui/ScrollToTopButton';
 import './landing.css';
 
 export default function LandingPage() {
-  const [activeTab, setActiveTab] = useState<TabId>('eventos');
   const [faqChatOpen, setFaqChatOpen] = useState(false);
 
   useLandingAnalytics();
@@ -21,7 +19,7 @@ export default function LandingPage() {
   return (
     <div className="dok7-landing" style={{ background: '#0b0b1a', fontFamily: "'Inter', system-ui, sans-serif" }}>
       <Hero />
-      <ShowcaseSection activeTab={activeTab} onTabChange={setActiveTab} />
+      <ShowcaseSection />
       <PorQueDok7Section />
       <DinamicasSection />
       <ContactSection />
