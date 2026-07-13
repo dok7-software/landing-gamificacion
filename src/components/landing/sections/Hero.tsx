@@ -1,8 +1,10 @@
 import { ContactForm } from '../ui/ContactForm';
+import { SiteLogo } from '../ui/SiteLogo';
 
 export function Hero() {
   return (
     <section id="contacto" className="dok7-section dok7-section--hero dok7-hero">
+      <SiteLogo />
       <div className="dok7-hero-grid">
         <div className="dok7-hero-copy">
           <h1>
@@ -11,7 +13,7 @@ export function Hero() {
           </h1>
 
           <p className="dok7-hero-description">
-            Creamos experiencias gamificadas para activar asistentes en eventos y convertir campañas promocionales en oportunidades de captación.
+            ¿Tu evento reúne asistentes, pero no consigue que participen? ¿Tus campañas generan tráfico, pero no captan suficientes leads? Cuéntanos tu proyecto y descubre cómo aumentar la participación y captar más leads.
           </p>
         </div>
 

@@ -20,7 +20,17 @@ const WELCOME_MESSAGE =
   '¡Hola! Soy el asistente de DOK7. Puedo resolver tus dudas sobre gamificación para eventos y campañas. Elige una pregunta o escríbela con tus palabras.';
 
 const FALLBACK_MESSAGE =
-  'No encontré una respuesta exacta para eso. Prueba con otra pregunta o cuéntanos tu caso en el formulario de contacto.';
+  'No encontré una respuesta exacta para eso. Déjanos tu correo y nos contactaremos contigo.';
+
+const INVALID_EMAIL_MESSAGE = 'Ese correo no parece válido. Escríbelo de nuevo, por favor.';
+
+const SUCCESS_MESSAGE =
+  '¡Gracias! Hemos recibido tu pregunta y nos pondremos en contacto contigo pronto.';
+
+const SEND_ERROR_MESSAGE =
+  'No pudimos guardar tu correo. Inténtalo de nuevo en unos segundos.';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function createId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -49,6 +59,9 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [awaitingEmail, setAwaitingEmail] = useState(false);
+  const [pendingQuestion, setPendingQuestion] = useState<string | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -75,11 +88,75 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
       const timer = window.setTimeout(() => inputRef.current?.focus(), 200);
       return () => window.clearTimeout(timer);
     }
-  }, [open]);
+  }, [open, awaitingEmail]);
+
+  const addBotMessage = (text: string, delay = 450) => {
+    setIsTyping(true);
+
+    window.setTimeout(() => {
+      setMessages((current) => [
+        ...current,
+        { id: createId(), role: 'bot', text },
+      ]);
+      setIsTyping(false);
+    }, delay);
+  };
+
+  const submitEmail = async (email: string) => {
+    if (!pendingQuestion || isSubmitting) return;
+
+    setMessages((current) => [
+      ...current,
+      { id: createId(), role: 'user', text: email },
+    ]);
+    setInput('');
+    setIsSubmitting(true);
+    setIsTyping(true);
+
+    try {
+      const response = await fetch('/api/faq-followup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          question: pendingQuestion,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error ?? SEND_ERROR_MESSAGE);
+      }
+
+      setAwaitingEmail(false);
+      setPendingQuestion(null);
+      addBotMessage(SUCCESS_MESSAGE, 300);
+    } catch {
+      addBotMessage(SEND_ERROR_MESSAGE, 300);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const respond = (question: string) => {
     const trimmed = question.trim();
-    if (!trimmed) return;
+    if (!trimmed || isSubmitting) return;
+
+    if (awaitingEmail) {
+      if (!EMAIL_REGEX.test(trimmed)) {
+        setMessages((current) => [
+          ...current,
+          { id: createId(), role: 'user', text: trimmed },
+        ]);
+        setInput('');
+        addBotMessage(INVALID_EMAIL_MESSAGE);
+        return;
+      }
+
+      void submitEmail(trimmed);
+      return;
+    }
 
     setMessages((current) => [
       ...current,
@@ -90,11 +167,21 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
 
     window.setTimeout(() => {
       const match = findFaqMatch(trimmed);
-      const answer = match?.answer ?? FALLBACK_MESSAGE;
 
+      if (match) {
+        setMessages((current) => [
+          ...current,
+          { id: createId(), role: 'bot', text: match.answer },
+        ]);
+        setIsTyping(false);
+        return;
+      }
+
+      setPendingQuestion(trimmed);
+      setAwaitingEmail(true);
       setMessages((current) => [
         ...current,
-        { id: createId(), role: 'bot', text: answer },
+        { id: createId(), role: 'bot', text: FALLBACK_MESSAGE },
       ]);
       setIsTyping(false);
     }, 450);
@@ -105,7 +192,8 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
     respond(input);
   };
 
-  const showSuggestions = messages.length === 1 && !isTyping;
+  const showSuggestions = messages.length === 1 && !isTyping && !awaitingEmail;
+  const inputDisabled = isTyping || isSubmitting;
 
   return (
     <div className="dok7-faq-chat">
@@ -164,14 +252,14 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
           <form className="dok7-faq-chat-form" onSubmit={handleSubmit}>
             <input
               ref={inputRef}
-              type="text"
+              type={awaitingEmail ? 'email' : 'text'}
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Escribe tu pregunta..."
-              aria-label="Escribe tu pregunta"
-              disabled={isTyping}
+              placeholder={awaitingEmail ? 'Escribe tu correo...' : 'Escribe tu pregunta...'}
+              aria-label={awaitingEmail ? 'Escribe tu correo' : 'Escribe tu pregunta'}
+              disabled={inputDisabled}
             />
-            <button type="submit" aria-label="Enviar pregunta" disabled={!input.trim() || isTyping}>
+            <button type="submit" aria-label={awaitingEmail ? 'Enviar correo' : 'Enviar pregunta'} disabled={!input.trim() || inputDisabled}>
               <SendIcon />
             </button>
           </form>

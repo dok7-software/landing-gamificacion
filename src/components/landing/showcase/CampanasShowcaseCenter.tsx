@@ -70,7 +70,10 @@ export function CampanasShowcaseCenter() {
   };
 
   return (
-    <div className="dok7-showcase-campanas">
+    <div className="dok7-showcase-campanas-wrap">
+      <div className="dok7-showcase-campanas-ambience" aria-hidden="true" />
+
+      <div className="dok7-showcase-campanas">
       <div className="dok7-showcase-funnel">
         {FLOW_STEPS.map((step, index) => {
           const isActive = activeStep === index;
@@ -169,6 +172,7 @@ export function CampanasShowcaseCenter() {
           Crear una campaña
         </Link>
       </div>
+    </div>
     </div>
   );
 }

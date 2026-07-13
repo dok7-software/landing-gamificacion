@@ -53,3 +53,9 @@ export interface BenefitItem {
   title: string;
   description: string;
 }
+
+export interface PorQueStat {
+  value: string;
+  label: string;
+  description: string;
+}

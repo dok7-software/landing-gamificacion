@@ -1,8 +1,8 @@
 import type {
-  BenefitItem,
   FaqItem,
   FlowStep,
   NavItem,
+  PorQueStat,
   RankingItem,
   StatItem,
 } from '../types';
@@ -11,7 +11,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Eventos', href: '#showcase', tabId: 'eventos' },
   { label: 'Campañas', href: '#showcase', tabId: 'campanas' },
   { label: 'Dinámicas', href: '#dinamicas' },
-  { label: 'Cómo funciona', href: '#objetivo' },
+  { label: 'Por qué Dok7', href: '#por-que-dok7' },
   { label: 'FAQ', href: '#', opensFaqChat: true },
 ];
 
@@ -76,15 +76,22 @@ export const CAMPANA_BENEFITS = [
   'Mide resultados en tiempo real',
 ];
 
-export const OBJETIVO_LEFT_BENEFITS: BenefitItem[] = [
-  { title: 'Más participación', description: 'Asistentes o usuarios completan acciones dentro de la experiencia.' },
-  { title: 'Más recuerdo de marca', description: 'Una experiencia interactiva tiene una alta tasa de recuerdo.' },
-];
-
-export const OBJETIVO_RIGHT_BENEFITS: BenefitItem[] = [
-  { title: 'Más leads', description: 'El registro se integra de forma natural dentro de la dinámica.' },
-  { title: 'Más tráfico', description: 'Dirige a las personas hacia stands, productos, contenidos o páginas clave.' },
-  { title: 'Más datos útiles', description: 'Recoge intereses, preferencias y comportamiento.' },
+export const PORQUE_DOK7_STATS: PorQueStat[] = [
+  {
+    value: '99%',
+    label: 'Clientes satisfechos',
+    description: 'Nuestros clientes valoran la claridad del proceso, la cercanía del equipo y la calidad de cada entrega.',
+  },
+  {
+    value: '100+',
+    label: 'Proyectos lanzados',
+    description: 'Hemos trabajado junto a startups y empresas en distintas etapas de construcción, mejora y crecimiento digital.',
+  },
+  {
+    value: '-25%',
+    label: 'Tiempo de entrega',
+    description: 'Reducimos tiempos de ejecución con una forma de trabajo ágil, clara y priorizada en cada fase del proyecto.',
+  },
 ];
 
 export const CONTACT_FORM_OPTIONS = {

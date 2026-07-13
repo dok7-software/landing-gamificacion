@@ -31,7 +31,7 @@ export function ScrollToTopButton() {
       aria-label="Volver al inicio"
       title="Volver al inicio"
     >
-      <ChevronUpIcon color="white" />
+      <ChevronUpIcon color="white" size={24} />
     </button>
   );
 }
