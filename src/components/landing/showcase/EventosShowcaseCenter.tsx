@@ -64,7 +64,17 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
   };
 
   return (
-    <div className="dok7-showcase-eventos">
+    <div className={`dok7-showcase-eventos dok7-showcase-eventos--${scene}`}>
+      <div className="dok7-showcase-event-ambience" aria-hidden="true">
+        <span className="dok7-showcase-event-ambience__blob dok7-showcase-event-ambience__blob--1" />
+        <span className="dok7-showcase-event-ambience__blob dok7-showcase-event-ambience__blob--2" />
+        <span className="dok7-showcase-event-ambience__blob dok7-showcase-event-ambience__blob--3" />
+        <span className="dok7-showcase-event-ambience__beam" />
+        <span className="dok7-showcase-event-ambience__crowd" />
+        <span className="dok7-showcase-event-ambience__floor" />
+      </div>
+
+      <div className="dok7-showcase-eventos-content">
       <div className="dok7-showcase-pills">
         <div className="dok7-showcase-pill dok7-showcase-pill--active">
           <span className="dok7-showcase-pill-label">Escena</span>
@@ -81,6 +91,7 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
         </div>
       </div>
 
+      <div className="dok7-showcase-eventos-stage">
       <div className="dok7-iphone">
         <div className="dok7-iphone-frame">
           <div className="dok7-iphone-btn dok7-iphone-btn--silent" aria-hidden="true" />
@@ -119,7 +130,13 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
                 ))}
               </div>
 
-              <div className="dok7-showcase-phone-body">
+              <div className={`dok7-showcase-phone-body dok7-showcase-phone-body--${scene}`}>
+                <div className="dok7-showcase-phone-ambience" aria-hidden="true">
+                  <span className="dok7-showcase-phone-ambience__wash" />
+                  <span className="dok7-showcase-phone-ambience__bokeh dok7-showcase-phone-ambience__bokeh--1" />
+                  <span className="dok7-showcase-phone-ambience__bokeh dok7-showcase-phone-ambience__bokeh--2" />
+                  <span className="dok7-showcase-phone-ambience__bokeh dok7-showcase-phone-ambience__bokeh--3" />
+                </div>
           {scene === 'pasaporte' && (
             <div className="dok7-showcase-scene dok7-showcase-scene--pasaporte">
               <p className="dok7-showcase-scene-title">Tu pasaporte</p>
@@ -187,8 +204,10 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
           </div>
         </div>
       </div>
+      </div>
 
       <p className="dok7-showcase-hint">Haz clic en las escenas o interactúa con el móvil</p>
+      </div>
     </div>
   );
 }

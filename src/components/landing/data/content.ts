@@ -12,7 +12,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Campañas', href: '#showcase', tabId: 'campanas' },
   { label: 'Dinámicas', href: '#dinamicas' },
   { label: 'Cómo funciona', href: '#objetivo' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'FAQ', href: '#', opensFaqChat: true },
 ];
 
 export const FAQ_ITEMS: FaqItem[] = [

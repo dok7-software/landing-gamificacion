@@ -9,13 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "DOK7 | Gamificación para eventos y campañas",
+  title: "Gamificación para eventos y campañas",
   description:
     "Experiencias gamificadas para activar asistentes en eventos y convertir campañas promocionales en oportunidades de captación.",
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-  },
 };
 
 export const viewport: Viewport = {

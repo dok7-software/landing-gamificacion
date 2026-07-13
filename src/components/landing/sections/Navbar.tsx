@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, type MouseEvent } from 'react';
 import { NAV_ITEMS } from '../data/content';
 import { CloseIcon, MenuIcon } from '../icons';
 import type { TabId } from '../types';
@@ -11,15 +11,19 @@ const LOGO_SRC = '/Logo-completo_blanco_sin-fondo.png';
 interface NavbarProps {
   activeTab: TabId;
   onTabChange: (tab: TabId) => void;
+  onFaqClick: () => void;
 }
 
-export function Navbar({ activeTab, onTabChange }: NavbarProps) {
+export function Navbar({ activeTab, onTabChange, onFaqClick }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
 
-  const handleNavClick = (tabId?: TabId) => {
-    if (tabId) {
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, tabId?: TabId, opensFaqChat?: boolean) => {
+    if (opensFaqChat) {
+      event.preventDefault();
+      onFaqClick();
+    } else if (tabId) {
       onTabChange(tabId);
     }
     closeMenu();
@@ -58,7 +62,7 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
             href={item.href}
             className={item.tabId && activeTab === item.tabId ? 'dok7-nav-link dok7-nav-link--active' : 'dok7-nav-link'}
             style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontSize: 15, fontWeight: 500 }}
-            onClick={() => handleNavClick(item.tabId)}
+            onClick={(event) => handleNavClick(event, item.tabId, item.opensFaqChat)}
           >
             {item.label}
           </a>
@@ -79,7 +83,7 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
             key={item.label}
             href={item.href}
             className={item.tabId && activeTab === item.tabId ? 'dok7-nav-link dok7-nav-link--active' : 'dok7-nav-link'}
-            onClick={() => handleNavClick(item.tabId)}
+            onClick={(event) => handleNavClick(event, item.tabId, item.opensFaqChat)}
           >
             {item.label}
           </a>

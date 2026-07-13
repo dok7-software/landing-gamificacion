@@ -4,6 +4,7 @@ export interface NavItem {
   label: string;
   href: string;
   tabId?: TabId;
+  opensFaqChat?: boolean;
 }
 
 export interface FaqItem {
