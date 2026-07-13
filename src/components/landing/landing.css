@@ -2379,6 +2379,49 @@
   line-height: 1.6;
 }
 
+.dok7-agradecimiento {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dok7-agradecimiento__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 120px 24px 48px;
+  text-align: center;
+}
+
+.dok7-form-success--page {
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+.dok7-agradecimiento__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6c3aed, #7c5cfc);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dok7-agradecimiento__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(108, 58, 237, 0.35);
+}
+
 .dok7-section--contact-cta {
   background: #0f1225;
   padding-top: 56px;
