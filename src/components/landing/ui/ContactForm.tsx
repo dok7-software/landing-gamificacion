@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { enviarEvento } from '@/lib/analytics/gtm';
 import { CONTACT_FORM_OPTIONS } from '../data/content';
 import { LockIcon } from '../icons';
@@ -33,6 +33,7 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
   const [error, setError] = useState<string | null>(null);
   const isHero = variant === 'hero';
   const formularioIniciado = useRef(false);
+  const exitoPendienteRef = useRef<{ ubicacion: string; tipo: string } | null>(null);
 
   const ubicacionFormulario = isHero ? 'hero' : 'seccion';
 
@@ -41,6 +42,18 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
     formularioIniciado.current = true;
     enviarEvento('formulario_iniciado', { ubicacion_formulario: ubicacionFormulario });
   };
+
+  useEffect(() => {
+    if (!submitted || !exitoPendienteRef.current) return;
+
+    const { ubicacion, tipo } = exitoPendienteRef.current;
+    exitoPendienteRef.current = null;
+
+    enviarEvento('formulario_enviado', {
+      ubicacion_formulario: ubicacion,
+      tipo_proyecto: tipo,
+    });
+  }, [submitted]);
 
   const updateField = <K extends keyof ContactFormState>(field: K, value: ContactFormState[K]) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -70,10 +83,10 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
         return;
       }
 
-      enviarEvento('formulario_enviado', {
-        ubicacion_formulario: ubicacionFormulario,
-        tipo_proyecto: form.projectType,
-      });
+      exitoPendienteRef.current = {
+        ubicacion: ubicacionFormulario,
+        tipo: form.projectType,
+      };
       setSubmitted(true);
     } catch {
       enviarEvento('formulario_error', {
