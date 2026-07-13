@@ -59,7 +59,7 @@ export function DynamicDemoModal({ dynamic, onClose }: DynamicDemoModalProps) {
           <div className="dok7-dyn-modal-demo-label">
             <span className="dok7-dyn-live-dot" /> Prueba interactiva
           </div>
-          <DynamicDemo id={dynamic.id} accent={dynamic.accent} />
+          <DynamicDemo id={dynamic.id} accent={dynamic.accent} nombreDinamica={dynamic.title} />
         </div>
       </div>
     </div>

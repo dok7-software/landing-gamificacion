@@ -1,6 +1,7 @@
 'use client';
 
 import type { TabId } from '../types';
+import { enviarEvento } from '@/lib/analytics/gtm';
 import { CalendarIcon, TargetIcon } from '../icons';
 import { CampanasPanel } from './ShowcasePanels';
 import { EventosPanel } from './EventosPanel';
@@ -26,6 +27,12 @@ const TABS = [
 ];
 
 export function ShowcaseSection({ activeTab, onTabChange }: ShowcaseSectionProps) {
+  const handleTabChange = (tabId: TabId) => {
+    if (tabId === activeTab) return;
+    onTabChange(tabId);
+    enviarEvento('pestaña_showcase', { pestaña: tabId });
+  };
+
   return (
     <>
       <div className="dok7-tabbar" role="tablist">
@@ -40,7 +47,7 @@ export function ShowcaseSection({ activeTab, onTabChange }: ShowcaseSectionProps
               aria-selected={isActive}
               aria-controls={`panel-${tab.id}`}
               className={`dok7-tab dok7-tab--${tab.id} ${isActive ? 'dok7-tab--active' : ''}`}
-              onClick={() => onTabChange(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
             >
               <span className="dok7-tab-shine" aria-hidden="true" />
               <span className="dok7-tab-glow" aria-hidden="true" />

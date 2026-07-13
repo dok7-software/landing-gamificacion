@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
+import { rastrearClicCta } from '@/lib/analytics/gtm';
 import { EVENTO_BENEFITS } from '../data/content';
 import { EVENTO_DYNAMICS } from '../data/dynamics';
 import { EventosShowcaseCenter } from '../showcase/EventosShowcaseCenter';
@@ -13,7 +14,11 @@ const INITIAL_YOUR_POINTS = 650;
 
 function MobileDynamicsLink() {
   return (
-    <Link href="#dinamicas" className="dok7-showcase-mobile-link">
+    <Link
+      href="#dinamicas"
+      className="dok7-showcase-mobile-link"
+      onClick={() => rastrearClicCta('Ver todas las dinámicas', 'showcase_eventos')}
+    >
       Ver todas las dinámicas
     </Link>
   );

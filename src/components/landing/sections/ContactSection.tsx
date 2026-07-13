@@ -1,3 +1,5 @@
+import { rastrearClicCta } from '@/lib/analytics/gtm';
+
 export function ContactSection() {
   return (
     <section className="dok7-section dok7-section--contact-cta">
@@ -8,7 +10,11 @@ export function ContactSection() {
         <p className="dok7-contact-cta__text">
           Diseñamos dinámicas gamificadas a medida: desde el concepto hasta la medición de resultados.
         </p>
-        <a href="#contacto" className="dok7-contact-cta__link">
+        <a
+          href="#contacto"
+          className="dok7-contact-cta__link"
+          onClick={() => rastrearClicCta('Volver al formulario', 'cta_contacto_final')}
+        >
           Volver al formulario
         </a>
       </div>

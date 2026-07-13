@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { enviarEvento } from '@/lib/analytics/gtm';
 import { ChevronUpIcon } from '../icons';
 
 export function ScrollToTopButton() {
@@ -20,6 +21,7 @@ export function ScrollToTopButton() {
   }, []);
 
   const scrollToTop = () => {
+    enviarEvento('clic_subir_arriba');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

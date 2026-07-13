@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { TabId } from './types';
+import { useLandingAnalytics } from './hooks/useLandingAnalytics';
 import { DinamicasSection } from './sections/DinamicasSection';
 import { ContactSection } from './sections/ContactSection';
 import { FaqChatbot } from './ui/FaqChatbot';
@@ -14,6 +15,8 @@ import './landing.css';
 export default function LandingPage() {
   const [activeTab, setActiveTab] = useState<TabId>('eventos');
   const [faqChatOpen, setFaqChatOpen] = useState(false);
+
+  useLandingAnalytics();
 
   return (
     <div className="dok7-landing" style={{ background: '#0b0b1a', fontFamily: "'Inter', system-ui, sans-serif" }}>

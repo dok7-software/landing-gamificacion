@@ -6,9 +6,10 @@ interface ScratchCardProps {
   accent: string;
   prize: string;
   revealThreshold?: number;
+  onReveal?: () => void;
 }
 
-export function ScratchCard({ accent, prize, revealThreshold = 55 }: ScratchCardProps) {
+export function ScratchCard({ accent, prize, revealThreshold = 55, onReveal }: ScratchCardProps) {
   const areaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const scratching = useRef(false);
@@ -69,6 +70,10 @@ export function ScratchCard({ accent, prize, revealThreshold = 55 }: ScratchCard
     observer.observe(area);
     return () => observer.disconnect();
   }, [drawOverlay]);
+
+  useEffect(() => {
+    if (revealed) onReveal?.();
+  }, [revealed, onReveal]);
 
   const getPos = (canvas: HTMLCanvasElement, clientX: number, clientY: number) => {
     const rect = canvas.getBoundingClientRect();

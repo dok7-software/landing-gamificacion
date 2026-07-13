@@ -1,38 +1,47 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { enviarEvento } from '@/lib/analytics/gtm';
 import type { DynamicId } from '../types';
 import { ScratchCard } from './ScratchCard';
 
 interface DynamicDemoProps {
   id: DynamicId;
   accent: string;
+  nombreDinamica: string;
 }
 
-export function DynamicDemo({ id, accent }: DynamicDemoProps) {
+function rastrearDemoCompletada(nombreDinamica: string, idDinamica: DynamicId) {
+  enviarEvento('demo_dinamica_completada', {
+    nombre_dinamica: nombreDinamica,
+    id_dinamica: idDinamica,
+  });
+}
+
+export function DynamicDemo({ id, accent, nombreDinamica }: DynamicDemoProps) {
   switch (id) {
     case 'pasaporte-qr':
-      return <PasaporteDemo accent={accent} />;
+      return <PasaporteDemo accent={accent} nombreDinamica={nombreDinamica} />;
     case 'misiones':
-      return <MisionesDemo accent={accent} />;
+      return <MisionesDemo accent={accent} nombreDinamica={nombreDinamica} />;
     case 'ranking':
       return <RankingDemo accent={accent} />;
     case 'trivia':
-      return <TriviaDemo accent={accent} />;
+      return <TriviaDemo accent={accent} nombreDinamica={nombreDinamica} />;
     case 'ruleta':
-      return <RuletaDemo accent={accent} />;
+      return <RuletaDemo accent={accent} nombreDinamica={nombreDinamica} />;
     case 'rasca-gana':
-      return <RascaDemo accent={accent} />;
+      return <RascaDemo accent={accent} nombreDinamica={nombreDinamica} />;
     case 'memoria':
-      return <MemoriaDemo accent={accent} />;
+      return <MemoriaDemo accent={accent} nombreDinamica={nombreDinamica} />;
     case 'calendario':
-      return <CalendarioDemo accent={accent} />;
+      return <CalendarioDemo accent={accent} nombreDinamica={nombreDinamica} />;
     default:
       return null;
   }
 }
 
-function PasaporteDemo({ accent }: { accent: string }) {
+function PasaporteDemo({ accent, nombreDinamica }: { accent: string; nombreDinamica: string }) {
   const [stamps, setStamps] = useState(2);
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -42,10 +51,15 @@ function PasaporteDemo({ accent }: { accent: string }) {
     setScanning(true);
     setMessage(null);
     setTimeout(() => {
-      setStamps((s) => s + 1);
+      const nuevosSellos = stamps + 1;
+      setStamps(nuevosSellos);
       setScanning(false);
-      if (stamps + 1 >= 6) setMessage('¡Pasaporte completo! Recompensa desbloqueada 🎉');
-      else setMessage('¡Sello añadido!');
+      if (nuevosSellos >= 6) {
+        rastrearDemoCompletada(nombreDinamica, 'pasaporte-qr');
+        setMessage('¡Pasaporte completo! Recompensa desbloqueada 🎉');
+      } else {
+        setMessage('¡Sello añadido!');
+      }
     }, 1200);
   };
 
@@ -70,15 +84,23 @@ function PasaporteDemo({ accent }: { accent: string }) {
   );
 }
 
-function MisionesDemo({ accent }: { accent: string }) {
+function MisionesDemo({ accent, nombreDinamica }: { accent: string; nombreDinamica: string }) {
   const [missions, setMissions] = useState([
     { id: 1, label: 'Visita el stand principal', done: true, pts: 100 },
     { id: 2, label: 'Responde la trivia del evento', done: false, pts: 150 },
     { id: 3, label: 'Comparte en redes sociales', done: false, pts: 200 },
   ]);
+  const [completada, setCompletada] = useState(false);
 
   const complete = (id: number) => {
-    setMissions((m) => m.map((x) => (x.id === id ? { ...x, done: true } : x)));
+    setMissions((m) => {
+      const actualizadas = m.map((x) => (x.id === id ? { ...x, done: true } : x));
+      if (!completada && actualizadas.every((mision) => mision.done)) {
+        setCompletada(true);
+        rastrearDemoCompletada(nombreDinamica, 'misiones');
+      }
+      return actualizadas;
+    });
   };
 
   const total = missions.filter((m) => m.done).reduce((a, m) => a + m.pts, 0);
@@ -153,12 +175,13 @@ const TRIVIA_QUESTIONS = [
   { q: '¿Cuál es nuestro producto estrella?', options: ['App móvil', 'Plataforma web', 'API', 'Hardware'], correct: 1 },
 ];
 
-function TriviaDemo({ accent }: { accent: string }) {
+function TriviaDemo({ accent, nombreDinamica }: { accent: string; nombreDinamica: string }) {
   const [qIndex, setQIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(15);
+  const [completada, setCompletada] = useState(false);
 
   const q = TRIVIA_QUESTIONS[qIndex];
 
@@ -180,6 +203,9 @@ function TriviaDemo({ accent }: { accent: string }) {
         setSelected(null);
         setFeedback(null);
         setTimeLeft(15);
+      } else if (!completada) {
+        setCompletada(true);
+        rastrearDemoCompletada(nombreDinamica, 'trivia');
       }
     }, 1500);
   };
@@ -228,11 +254,12 @@ function getWheelResultMessage(prize: string): string {
   return `¡Has ganado: ${prize}! 🎉`;
 }
 
-function RuletaDemo({ accent }: { accent: string }) {
+function RuletaDemo({ accent, nombreDinamica }: { accent: string; nombreDinamica: string }) {
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [prize, setPrize] = useState<string | null>(null);
   const rotationRef = useRef(0);
+  const [completada, setCompletada] = useState(false);
 
   const spin = () => {
     if (spinning) return;
@@ -252,6 +279,10 @@ function RuletaDemo({ accent }: { accent: string }) {
     setTimeout(() => {
       setSpinning(false);
       setPrize(WHEEL_PRIZES[getPrizeIndexFromRotation(nextRotation)]);
+      if (!completada) {
+        setCompletada(true);
+        rastrearDemoCompletada(nombreDinamica, 'ruleta');
+      }
     }, 4000);
   };
 
@@ -278,10 +309,20 @@ function RuletaDemo({ accent }: { accent: string }) {
   );
 }
 
-function RascaDemo({ accent }: { accent: string }) {
+function RascaDemo({ accent, nombreDinamica }: { accent: string; nombreDinamica: string }) {
+  const [completada, setCompletada] = useState(false);
+
   return (
     <div className="dok7-demo dok7-demo--rasca">
-      <ScratchCard accent={accent} prize="20% de descuento" />
+      <ScratchCard
+        accent={accent}
+        prize="20% de descuento"
+        onReveal={() => {
+          if (completada) return;
+          setCompletada(true);
+          rastrearDemoCompletada(nombreDinamica, 'rasca-gana');
+        }}
+      />
     </div>
   );
 }
@@ -292,11 +333,12 @@ function shuffleDeck() {
   return [...MEMORY_EMOJIS, ...MEMORY_EMOJIS].sort(() => Math.random() - 0.5);
 }
 
-function MemoriaDemo({ accent }: { accent: string }) {
+function MemoriaDemo({ accent, nombreDinamica }: { accent: string; nombreDinamica: string }) {
   const [deck, setDeck] = useState<string[]>([]);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   const [lock, setLock] = useState(false);
+  const [completada, setCompletada] = useState(false);
 
   useEffect(() => {
     setDeck(shuffleDeck());
@@ -311,7 +353,14 @@ function MemoriaDemo({ accent }: { accent: string }) {
         setLock(true);
         const [a, b] = next;
         if (deck[a] === deck[b]) {
-          setMatched((m) => [...m, a, b]);
+          setMatched((m) => {
+            const nuevos = [...m, a, b];
+            if (!completada && nuevos.length === deck.length) {
+              setCompletada(true);
+              rastrearDemoCompletada(nombreDinamica, 'memoria');
+            }
+            return nuevos;
+          });
           setFlipped([]);
           setLock(false);
         } else {
@@ -322,7 +371,7 @@ function MemoriaDemo({ accent }: { accent: string }) {
         }
       }
     },
-    [deck, flipped, lock, matched]
+    [deck, flipped, lock, matched, completada, nombreDinamica],
   );
 
   const won = deck.length > 0 && matched.length === deck.length;
@@ -350,8 +399,9 @@ function MemoriaDemo({ accent }: { accent: string }) {
   );
 }
 
-function CalendarioDemo({ accent }: { accent: string }) {
+function CalendarioDemo({ accent, nombreDinamica }: { accent: string; nombreDinamica: string }) {
   const [opened, setOpened] = useState<number[]>([1, 2, 3, 4, 5, 6]);
+  const [completada, setCompletada] = useState(false);
   const today = 7;
   const prizes: Record<number, string> = {
     1: '5% descuento', 2: 'Envío gratis', 3: '10 pts', 4: '15% OFF', 5: 'Sticker digital', 6: 'Sorteo extra', 7: '¡Premio sorpresa!',
@@ -360,6 +410,10 @@ function CalendarioDemo({ accent }: { accent: string }) {
   const openDay = (d: number) => {
     if (d !== today || opened.includes(d)) return;
     setOpened((o) => [...o, d]);
+    if (!completada) {
+      setCompletada(true);
+      rastrearDemoCompletada(nombreDinamica, 'calendario');
+    }
   };
 
   return (

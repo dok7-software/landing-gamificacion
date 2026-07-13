@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { enviarEvento, rastrearClicCta } from '@/lib/analytics/gtm';
 import { CAMPANA_DYNAMICS, EVENTO_DYNAMICS } from '../data/dynamics';
 import { DynamicDemoModal } from '../dynamics/DynamicDemoModal';
 import { CalendarIcon, LightbulbIcon, TargetIcon } from '../icons';
@@ -29,7 +30,17 @@ export function DinamicasSection() {
       />
       <div className="dok7-dynamics-grid" style={{ marginBottom: 48 }}>
         {EVENTO_DYNAMICS.map((item) => (
-          <DynamicCard key={item.id} dynamic={item} onOpen={setActiveDynamic} />
+          <DynamicCard
+            key={item.id}
+            dynamic={item}
+            onOpen={(dynamic) => {
+              enviarEvento('clic_dinamica', {
+                nombre_dinamica: dynamic.title,
+                categoria_dinamica: dynamic.category,
+              });
+              setActiveDynamic(dynamic);
+            }}
+          />
         ))}
       </div>
 
@@ -40,7 +51,17 @@ export function DinamicasSection() {
       />
       <div className="dok7-dynamics-grid" style={{ marginBottom: 32 }}>
         {CAMPANA_DYNAMICS.map((item) => (
-          <DynamicCard key={item.id} dynamic={item} onOpen={setActiveDynamic} />
+          <DynamicCard
+            key={item.id}
+            dynamic={item}
+            onOpen={(dynamic) => {
+              enviarEvento('clic_dinamica', {
+                nombre_dinamica: dynamic.title,
+                categoria_dinamica: dynamic.category,
+              });
+              setActiveDynamic(dynamic);
+            }}
+          />
         ))}
       </div>
 
@@ -48,7 +69,11 @@ export function DinamicasSection() {
         <LightbulbIcon />
         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>
           Descubre todas las{' '}
-          <a href="#contacto" style={{ color: '#7c5cfc', textDecoration: 'underline' }}>
+          <a
+            href="#contacto"
+            style={{ color: '#7c5cfc', textDecoration: 'underline' }}
+            onClick={() => rastrearClicCta('dinámicas', 'banner_dinamicas')}
+          >
             dinámicas
           </a>{' '}
           que tenemos para ti.

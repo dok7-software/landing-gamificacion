@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useRef } from 'react';
+import { rastrearClicCta, rastrearInteraccionDemo } from '@/lib/analytics/gtm';
 import { FLOW_STEPS } from '../data/content';
 
 const WHEEL_SLICES = [
@@ -32,6 +33,7 @@ export function CampanasShowcaseCenter() {
 
   const spinWheel = () => {
     if (spinning) return;
+    rastrearInteraccionDemo('campanas', 'girar_ruleta', 'juego');
     const segment = Math.floor(Math.random() * WHEEL_SLICES.length);
     setPrize(null);
     setSpinning(true);
@@ -58,14 +60,19 @@ export function CampanasShowcaseCenter() {
 
   const fillForm = () => {
     if (formStep >= 3) return;
-    setFormStep((s) => s + 1);
-    if (formStep + 1 >= 3) {
+    const siguientePaso = formStep + 1;
+    setFormStep(siguientePaso);
+    if (siguientePaso >= 3) {
+      rastrearInteraccionDemo('campanas', 'lead_demo_captado', 'registro');
       setLeadCaptured(true);
       setTimeout(() => setActiveStep(3), 600);
+    } else {
+      rastrearInteraccionDemo('campanas', 'rellenar_formulario_demo', 'registro');
     }
   };
 
   const revealPrize = () => {
+    rastrearInteraccionDemo('campanas', 'revelar_premio', 'incentivo');
     setPrizeRevealed(true);
   };
 
@@ -82,7 +89,10 @@ export function CampanasShowcaseCenter() {
               <button
                 type="button"
                 className={`dok7-showcase-funnel-step ${isActive ? 'dok7-showcase-funnel-step--active' : ''}`}
-                onClick={() => setActiveStep(index)}
+                onClick={() => {
+                  setActiveStep(index);
+                  rastrearInteraccionDemo('campanas', 'clic_paso_funnel', FLOW_STEPS[index].title.toLowerCase());
+                }}
                 aria-pressed={isActive}
               >
                 <div className="dok7-showcase-funnel-visual">
@@ -142,7 +152,10 @@ export function CampanasShowcaseCenter() {
 
       <div className="dok7-showcase-campanas-actions">
         {activeStep === 0 && (
-          <button type="button" className="dok7-showcase-action dok7-showcase-action--blue" onClick={() => setActiveStep(1)}>
+          <button type="button" className="dok7-showcase-action dok7-showcase-action--blue" onClick={() => {
+            rastrearInteraccionDemo('campanas', 'simular_anuncio', 'anuncio');
+            setActiveStep(1);
+          }}>
             Simular clic en anuncio
           </button>
         )}
@@ -168,7 +181,11 @@ export function CampanasShowcaseCenter() {
           </div>
         )}
 
-        <Link href="#contacto" className="dok7-showcase-link-cta">
+        <Link
+          href="#contacto"
+          className="dok7-showcase-link-cta"
+          onClick={() => rastrearClicCta('Crear una campaña', 'showcase_campanas')}
+        >
           Crear una campaña
         </Link>
       </div>

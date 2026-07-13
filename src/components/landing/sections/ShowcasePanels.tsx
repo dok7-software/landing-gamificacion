@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { rastrearClicCta } from '@/lib/analytics/gtm';
 import { CAMPANA_BENEFITS } from '../data/content';
 import { CAMPANA_DYNAMICS } from '../data/dynamics';
 import { CampanasShowcaseCenter } from '../showcase/CampanasShowcaseCenter';
@@ -8,7 +9,11 @@ import { CheckList } from '../ui/CheckList';
 
 function MobileDynamicsLink() {
   return (
-    <Link href="#dinamicas" className="dok7-showcase-mobile-link">
+    <Link
+      href="#dinamicas"
+      className="dok7-showcase-mobile-link"
+      onClick={() => rastrearClicCta('Ver todas las dinámicas', 'showcase_campanas')}
+    >
       Ver todas las dinámicas
     </Link>
   );

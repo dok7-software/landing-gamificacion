@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { rastrearInteraccionDemo } from '@/lib/analytics/gtm';
 
 const SCENES = [
   { id: 'pasaporte', label: 'Pasaporte' },
@@ -35,6 +36,7 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
 
   const scanQr = () => {
     if (scanning || stamps >= 6) return;
+    rastrearInteraccionDemo('eventos', 'escanear_qr', 'pasaporte');
     setScanning(true);
     setToast(null);
     setTimeout(() => {
@@ -49,6 +51,7 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
     if (missionProgress >= 5) return;
     const next = missionProgress + 1;
     const points = next >= 5 ? 120 : 24;
+    rastrearInteraccionDemo('eventos', next >= 5 ? 'mision_completada' : 'avanzar_mision', 'mision');
     setMissionProgress(next);
     setToast(next >= 5 ? '¡Misión completada! +120 pts' : `Stand ${next} visitado (+24 pts)`);
     onEarnPoints(points);
@@ -57,6 +60,7 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
   const answerTrivia = (correct: boolean) => {
     if (triviaAnswered) return;
     const points = correct ? 80 : 20;
+    rastrearInteraccionDemo('eventos', correct ? 'trivia_correcta' : 'trivia_incorrecta', 'trivia');
     setTriviaAnswered(true);
     setToast(correct ? '¡Correcto! +80 pts' : '¡Casi! +20 pts por participar');
     onEarnPoints(points);
@@ -123,7 +127,13 @@ export function EventosShowcaseCenter({ yourPoints, onEarnPoints }: EventosShowc
                     role="tab"
                     aria-selected={scene === s.id}
                     className={`dok7-showcase-scene-tab ${scene === s.id ? 'dok7-showcase-scene-tab--active' : ''}`}
-                    onClick={() => { setScene(s.id); setToast(null); }}
+                    onClick={() => {
+                      if (scene !== s.id) {
+                        rastrearInteraccionDemo('eventos', 'cambiar_escena', s.id);
+                      }
+                      setScene(s.id);
+                      setToast(null);
+                    }}
                   >
                     {s.label}
                   </button>

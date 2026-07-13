@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useRef, useState } from 'react';
+import { enviarEvento } from '@/lib/analytics/gtm';
 import { FAQ_ITEMS } from '../data/content';
 import { CloseIcon } from '../icons';
 import { findFaqMatch } from '../utils/matchFaq';
@@ -131,6 +132,7 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
 
       setAwaitingEmail(false);
       setPendingQuestion(null);
+      enviarEvento('email_faq_capturado');
       addBotMessage(SUCCESS_MESSAGE, 300);
     } catch {
       addBotMessage(SEND_ERROR_MESSAGE, 300);
@@ -167,6 +169,11 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
 
     window.setTimeout(() => {
       const match = findFaqMatch(trimmed);
+
+      enviarEvento('pregunta_faq', {
+        texto_pregunta: trimmed,
+        respuesta_encontrada: Boolean(match),
+      });
 
       if (match) {
         setMessages((current) => [
@@ -266,7 +273,13 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
 
           <p className="dok7-faq-chat-footer">
             ¿Necesitas algo más personalizado?{' '}
-            <a href="#contacto" onClick={() => onOpenChange(false)}>
+            <a
+              href="#contacto"
+              onClick={() => {
+                enviarEvento('clic_contacto_desde_chat');
+                onOpenChange(false);
+              }}
+            >
               Contáctanos
             </a>
           </p>
@@ -276,7 +289,11 @@ export function FaqChatbot({ open, onOpenChange }: FaqChatbotProps) {
       <button
         type="button"
         className={`dok7-faq-chat-toggle${open ? ' dok7-faq-chat-toggle--open' : ''}`}
-        onClick={() => onOpenChange(!open)}
+        onClick={() => {
+          const siguienteEstado = !open;
+          enviarEvento(siguienteEstado ? 'chat_faq_abierto' : 'chat_faq_cerrado');
+          onOpenChange(siguienteEstado);
+        }}
         aria-label={open ? 'Cerrar asistente de FAQ' : 'Abrir asistente de FAQ'}
         aria-expanded={open}
       >

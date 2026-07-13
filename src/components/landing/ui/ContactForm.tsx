@@ -1,6 +1,7 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
+import { enviarEvento } from '@/lib/analytics/gtm';
 import { CONTACT_FORM_OPTIONS } from '../data/content';
 import { LockIcon } from '../icons';
 import { FormField, FormSelect, FormTextarea } from './FormFields';
@@ -31,6 +32,15 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isHero = variant === 'hero';
+  const formularioIniciado = useRef(false);
+
+  const ubicacionFormulario = isHero ? 'hero' : 'seccion';
+
+  const marcarFormularioIniciado = () => {
+    if (formularioIniciado.current) return;
+    formularioIniciado.current = true;
+    enviarEvento('formulario_iniciado', { ubicacion_formulario: ubicacionFormulario });
+  };
 
   const updateField = <K extends keyof ContactFormState>(field: K, value: ContactFormState[K]) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -51,12 +61,25 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
       const data = (await response.json()) as { error?: string };
 
       if (!response.ok) {
-        setError(data.error ?? 'No se pudo enviar el mensaje. Inténtalo de nuevo.');
+        const mensajeError = data.error ?? 'No se pudo enviar el mensaje. Inténtalo de nuevo.';
+        enviarEvento('formulario_error', {
+          ubicacion_formulario: ubicacionFormulario,
+          tipo_error: mensajeError,
+        });
+        setError(mensajeError);
         return;
       }
 
+      enviarEvento('formulario_enviado', {
+        ubicacion_formulario: ubicacionFormulario,
+        tipo_proyecto: form.projectType,
+      });
       setSubmitted(true);
     } catch {
+      enviarEvento('formulario_error', {
+        ubicacion_formulario: ubicacionFormulario,
+        tipo_error: 'error_conexion',
+      });
       setError('Error de conexión. Inténtalo de nuevo.');
     } finally {
       setSubmitting(false);
@@ -93,12 +116,12 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
       ) : (
         <>
           <div className={`dok7-form-row ${isHero ? 'dok7-form-row--hero' : ''}`}>
-            <FormField label="Nombre" placeholder="Ej.: Juan Pérez" value={form.name} onChange={(v) => updateField('name', v)} required />
-            <FormField label="Empresa" placeholder="Ej.: Tu empresa" value={form.company} onChange={(v) => updateField('company', v)} />
+            <FormField label="Nombre" placeholder="Ej.: Juan Pérez" value={form.name} onChange={(v) => updateField('name', v)} onFocus={marcarFormularioIniciado} required />
+            <FormField label="Empresa" placeholder="Ej.: Tu empresa" value={form.company} onChange={(v) => updateField('company', v)} onFocus={marcarFormularioIniciado} />
           </div>
           <div className={`dok7-form-row ${isHero ? 'dok7-form-row--hero' : ''}`}>
-            <FormField label="Email" placeholder="ejemplo@empresa.com" type="email" value={form.email} onChange={(v) => updateField('email', v)} required />
-            <FormSelect label="¿Qué quieres crear?" options={CONTACT_FORM_OPTIONS.projectType} value={form.projectType} onChange={(v) => updateField('projectType', v)} />
+            <FormField label="Email" placeholder="ejemplo@empresa.com" type="email" value={form.email} onChange={(v) => updateField('email', v)} onFocus={marcarFormularioIniciado} required />
+            <FormSelect label="¿Qué quieres crear?" options={CONTACT_FORM_OPTIONS.projectType} value={form.projectType} onChange={(v) => updateField('projectType', v)} onFocus={marcarFormularioIniciado} />
           </div>
           <div className={isHero ? 'dok7-hero-form-message' : ''} style={isHero ? undefined : { marginBottom: 24 }}>
             <FormTextarea
@@ -106,6 +129,7 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
               placeholder="Cuéntanos más sobre tu proyecto, audiencia y lo que quieres lograr..."
               value={form.message}
               onChange={(v) => updateField('message', v)}
+              onFocus={marcarFormularioIniciado}
               maxLength={isHero ? 500 : 1000}
             />
           </div>

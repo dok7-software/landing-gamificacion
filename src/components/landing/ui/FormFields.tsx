@@ -6,6 +6,7 @@ interface FormFieldProps {
   type?: string;
   value?: string;
   onChange?: (value: string) => void;
+  onFocus?: () => void;
   required?: boolean;
 }
 
@@ -22,7 +23,7 @@ const inputStyle: CSSProperties = {
   boxSizing: 'border-box',
 };
 
-export function FormField({ label, placeholder, type = 'text', value, onChange, required }: FormFieldProps) {
+export function FormField({ label, placeholder, type = 'text', value, onChange, onFocus, required }: FormFieldProps) {
   return (
     <div>
       <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'white', marginBottom: 8 }}>
@@ -34,6 +35,7 @@ export function FormField({ label, placeholder, type = 'text', value, onChange, 
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
+        onFocus={onFocus}
         required={required}
         style={inputStyle}
       />
@@ -46,9 +48,10 @@ interface FormSelectProps {
   options: string[];
   value?: string;
   onChange?: (value: string) => void;
+  onFocus?: () => void;
 }
 
-export function FormSelect({ label, options, value, onChange }: FormSelectProps) {
+export function FormSelect({ label, options, value, onChange, onFocus }: FormSelectProps) {
   const selectedValue = value ?? options[0];
   const isPlaceholder = selectedValue === options[0];
 
@@ -58,6 +61,7 @@ export function FormSelect({ label, options, value, onChange }: FormSelectProps)
       <select
         value={selectedValue}
         onChange={(e) => onChange?.(e.target.value)}
+        onFocus={onFocus}
         style={{ ...inputStyle, color: isPlaceholder ? 'rgba(255,255,255,0.5)' : '#ffffff', appearance: 'none', cursor: 'pointer' }}
       >
         {options.map((option) => (
@@ -75,10 +79,11 @@ interface FormTextareaProps {
   placeholder: string;
   value?: string;
   onChange?: (value: string) => void;
+  onFocus?: () => void;
   maxLength?: number;
 }
 
-export function FormTextarea({ label, placeholder, value = '', onChange, maxLength = 1000 }: FormTextareaProps) {
+export function FormTextarea({ label, placeholder, value = '', onChange, onFocus, maxLength = 1000 }: FormTextareaProps) {
   return (
     <div>
       <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'white', marginBottom: 8 }}>{label}</label>
@@ -87,6 +92,7 @@ export function FormTextarea({ label, placeholder, value = '', onChange, maxLeng
         value={value}
         maxLength={maxLength}
         onChange={(e) => onChange?.(e.target.value)}
+        onFocus={onFocus}
         style={{ ...inputStyle, resize: 'vertical', minHeight: 100 }}
       />
       <div style={{ textAlign: 'right', fontSize: 12, color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>
