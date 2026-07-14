@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { AgradecimientoConversion } from '@/components/landing/AgradecimientoConversion';
 import '@/components/landing/landing.css';
 
 export const metadata: Metadata = {
@@ -14,6 +15,7 @@ export default function AgradecimientoPage() {
       className="dok7-landing dok7-agradecimiento"
       style={{ background: '#0b0b1a', fontFamily: "'Inter', system-ui, sans-serif" }}
     >
+      <AgradecimientoConversion />
       <Link href="/" className="dok7-site-logo" aria-label="DOK7 — Volver al inicio">
         <Image
           src="/Logo-completo_blanco_sin-fondo.png"

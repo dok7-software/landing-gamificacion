@@ -3,6 +3,21 @@ type ParametrosEvento = Record<string, string | number | boolean | undefined>;
 declare global {
   interface Window {
     dataLayer?: Array<Record<string, unknown>>;
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+/** Conversión Google Ads — disparar solo en /agradecimiento. */
+export function enviarConversionLeadForm() {
+  if (typeof window === 'undefined') return;
+
+  window.dataLayer = window.dataLayer ?? [];
+  window.dataLayer.push({
+    event: 'conversion_event_submit_lead_form',
+  });
+
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'conversion_event_submit_lead_form');
   }
 }
 
