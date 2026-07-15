@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { enviarConversionLeadForm } from '@/lib/analytics/gtm';
+import { enviarConversionPageViewAgradecimiento } from '@/lib/analytics/gtm';
 
 export function AgradecimientoConversion() {
   const enviado = useRef(false);
@@ -9,7 +9,7 @@ export function AgradecimientoConversion() {
   useEffect(() => {
     if (enviado.current) return;
     enviado.current = true;
-    enviarConversionLeadForm();
+    enviarConversionPageViewAgradecimiento();
   }, []);
 
   return null;

@@ -7,17 +7,20 @@ declare global {
   }
 }
 
-/** Conversión Google Ads — disparar solo en /agradecimiento. */
-export function enviarConversionLeadForm() {
+/** Conversión Google Ads — page view de /agradecimiento. */
+export function enviarConversionPageViewAgradecimiento() {
   if (typeof window === 'undefined') return;
 
   window.dataLayer = window.dataLayer ?? [];
   window.dataLayer.push({
-    event: 'conversion_event_submit_lead_form',
+    event: 'conversion_event_page_view',
+    page_path: '/agradecimiento',
   });
 
   if (typeof window.gtag === 'function') {
-    window.gtag('event', 'conversion_event_submit_lead_form');
+    window.gtag('event', 'conversion_event_page_view', {
+      page_path: '/agradecimiento',
+    });
   }
 }
 
