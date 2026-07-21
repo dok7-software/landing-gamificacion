@@ -41,17 +41,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xk6fnr5dyv");`}
         </Script>
-        {/* Google Ads — tag global (gtag.js) para seguimiento de conversiones */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18271571852"
-          strategy="afterInteractive"
-        />
-        <Script id="google-ads-gtag-config" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'AW-18271571852');`}
-        </Script>
       </head>
       <body className={inter.variable}>
         <noscript>

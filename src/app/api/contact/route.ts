@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 
 const CONTACT_RECIPIENTS = [
@@ -88,7 +89,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No se pudo enviar el mensaje. Inténtalo de nuevo.' }, { status: 502 });
     }
 
-    return NextResponse.json({ success: true });
+    const leadId = randomUUID();
+
+    return NextResponse.json(
+      {
+        success: true,
+        leadId,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error('Contact form error:', error);
     return NextResponse.json({ error: 'Error de conexión. Inténtalo de nuevo.' }, { status: 500 });

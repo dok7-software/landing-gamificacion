@@ -3,6 +3,7 @@
 import { FormEvent, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { enviarEvento } from '@/lib/analytics/gtm';
+import { guardarConversionPendiente } from '@/lib/analytics/leadConversion';
 import { CONTACT_FORM_OPTIONS } from '../data/content';
 import { LockIcon } from '../icons';
 import { FormField, FormSelect, FormTextarea } from './FormFields';
@@ -49,6 +50,7 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submitting) return;
     setSubmitting(true);
     setError(null);
 
@@ -59,7 +61,7 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
         body: JSON.stringify(form),
       });
 
-      const data = (await response.json()) as { error?: string };
+      const data = (await response.json()) as { error?: string; leadId?: string };
 
       if (!response.ok) {
         const mensajeError = data.error ?? 'No se pudo enviar el mensaje. Inténtalo de nuevo.';
@@ -71,10 +73,27 @@ export function ContactForm({ variant = 'section' }: ContactFormProps) {
         return;
       }
 
+      if (typeof data.leadId !== 'string' || data.leadId.trim().length === 0) {
+        enviarEvento('formulario_error', {
+          ubicacion_formulario: ubicacionFormulario,
+          tipo_error: 'lead_id_invalido',
+        });
+        setError('No se pudo confirmar el envío. Inténtalo de nuevo.');
+        return;
+      }
+
       enviarEvento('formulario_enviado', {
         ubicacion_formulario: ubicacionFormulario,
         tipo_proyecto: form.projectType,
       });
+
+      guardarConversionPendiente({
+        leadId: data.leadId,
+        ubicacionFormulario,
+        tipoProyecto: form.projectType,
+        createdAt: Date.now(),
+      });
+
       router.push('/agradecimiento');
     } catch {
       enviarEvento('formulario_error', {
